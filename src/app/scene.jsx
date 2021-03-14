@@ -14,7 +14,7 @@ export default function Scene() {
   return (
     <Canvas
       style={{ height: '100vh', width: '100vw' }}
-      onCreated={(state) => state.gl.setClearColor('#585858')}
+      onCreated={(state) => state.gl.setClearColor('#000000')}
       onDoubleClick={setClickEvent}
     >
       <Grid />
