@@ -1,5 +1,6 @@
 import getPixels from 'get-pixels'
 import { PlaneBufferGeometry, Mesh, MeshNormalMaterial, Group } from 'three'
+import tilebelt from '@mapbox/tilebelt'
 import QuadTextureMaterial from './quad-texture-material'
 
 const tileMaterial = new MeshNormalMaterial({ wireframe: true })
@@ -207,13 +208,8 @@ class Tile {
     const nElevation = Math.sqrt(this.elevation.length)
     const ratio = nElevation / (nPosition - 1)
     let x, y
-    for (
-      // let i = nPosition;
-      let i = 0;
-      i < geometry.attributes.position.count - nPosition;
-      i++
-    ) {
-      // if (i % nPosition === 0 || i % nPosition === nPosition - 1) continue;
+    for (let i = 0; i < geometry.attributes.position.count - nPosition; i++) {
+      // if (i % nPosition === 0 || i % nPosition === nPosition - 1) continue
       if (i % nPosition === nPosition - 1) continue
       x = Math.floor(i / nPosition)
       y = i % nPosition
@@ -262,14 +258,14 @@ class Tile {
   }
 
   setPosition(center) {
-    const position = Utils.tile2position(
+    this.position = Utils.tile2position(
       this.z,
       this.x,
       this.y,
       center,
       this.size
     )
-    this.mesh.position.set(...Object.values(position))
+    this.mesh.position.set(...Object.values(this.position))
   }
 
   resolveSeamY(neighbor) {
@@ -436,6 +432,46 @@ class Map {
       tile.mesh.material.dispose()
     })
     this.tileCache = {}
+  }
+
+  getProjection([lat, lng, alt]) {
+    const { tileCache, tileSize, options } = this
+    const { zScale } = options
+
+    let condidate = null
+    for (let index in tileCache) {
+      const tile = tileCache[index]
+      const { x, y, z, position } = tile
+
+      const box = tilebelt.tileToBBOX([x, y, z])
+      const [w, s, e, n] = box
+
+      const status = s < lat && lat < n && w < lng && lng < e
+
+      if (status) {
+        condidate = {
+          center: position,
+          coords: [lat, lng, alt],
+          box
+        }
+      }
+    }
+
+    if (condidate) {
+      const { box, center, coords } = condidate
+      const [lat, lng] = coords
+      const [w, s, e, n] = box
+
+      const xStart = center.x - tileSize / 2
+      const yStart = center.y - tileSize / 2
+
+      const xOffset = tileSize * (1 - (e - lng) / (e - w))
+      const yOffset = tileSize * (1 - (n - lat) / (n - s))
+
+      return [xStart + xOffset, yStart + yOffset, alt * zScale]
+    }
+
+    return null
   }
 }
 
