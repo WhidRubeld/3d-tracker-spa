@@ -9,7 +9,7 @@ import {
 } from 'three'
 
 function InfiniteGridHelper(size1, size2, color, distance) {
-  color = color || new Color('white')
+  color = color || new Color('rgb(125, 125, 125)')
   size1 = size1 || 10
   size2 = size2 || 100
 
