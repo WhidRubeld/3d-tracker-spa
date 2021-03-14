@@ -59,57 +59,6 @@ class Utils {
     return { x: deltaX + center.x, y: deltaY + center.y, z }
   }
 }
-
-/*
-class MapPicker {
-  constructor(camera, map, domElement, controls) {
-    this.vec = new Vector3() // create once and reuse
-    this.position = new Vector3() // create once and reuse
-    this.camera = camera
-    this.map = map
-    this.domElement = domElement
-    this.controls = controls
-
-    this.domElement.addEventListener('mousemove', this.onMouseMove.bind(this))
-    this.domElement.addEventListener('dblclick', this.onMouseClick.bind(this))
-  }
-
-  computeWorldPosition(event) {
-    // cf. https://stackoverflow.com/a/13091694/343834
-    this.vec.set(
-      (event.clientX / window.innerWidth) * 2 - 1,
-      -(event.clientY / window.innerHeight) * 2 + 1,
-      0.5
-    )
-
-    this.vec.unproject(this.camera)
-
-    this.vec.sub(this.camera.position).normalize()
-
-    var distance = -this.camera.position.z / this.vec.z
-
-    this.position
-      .copy(this.camera.position)
-      .add(this.vec.multiplyScalar(distance))
-  }
-
-  onMouseMove(event) {
-    // this.computeWorldPosition(event)
-  }
-
-  onMouseClick(event) {
-    this.computeWorldPosition(event)
-    this.map.addFromPosition(this.position.x, this.position.y)
-  }
-
-  go(lat, lon) {
-    this.map.clean()
-    this.map.geoLocation = [lat, lon]
-    this.map.init()
-  }
-}
-*/
-
 class Source {
   constructor(api, token, options) {
     this.supportedApis = {
@@ -149,17 +98,18 @@ class Source {
 }
 
 class Tile {
-  constructor(map, z, x, y, size) {
+  constructor(map, z, x, y, materialOptions) {
     this.map = map
     this.z = z
     this.x = x
     this.y = y
-    this.size = size || this.map.options.tileSize
+    this.size = this.map.options.tileSize
     this.baseURL = 'https://s3.amazonaws.com/elevation-tiles-prod/terrarium'
     this.shape = null
     this.elevation = null
     this.seamX = false
     this.seamY = false
+    this.materialOptions = materialOptions
   }
 
   key() {
@@ -226,16 +176,40 @@ class Tile {
 
   childrens() {
     return [
-      new Tile(this.map, this.z + 1, this.x * 2, this.y * 2),
-      new Tile(this.map, this.z + 1, this.x * 2, this.y * 2 + 1),
-      new Tile(this.map, this.z + 1, this.x * 2 + 1, this.y * 2),
-      new Tile(this.map, this.z + 1, this.x * 2 + 1, this.y * 2 + 1)
+      new Tile(
+        this.map,
+        this.z + 1,
+        this.x * 2,
+        this.y * 2,
+        this.materialOptions
+      ),
+      new Tile(
+        this.map,
+        this.z + 1,
+        this.x * 2,
+        this.y * 2 + 1,
+        this.materialOptions
+      ),
+      new Tile(
+        this.map,
+        this.z + 1,
+        this.x * 2 + 1,
+        this.y * 2,
+        this.materialOptions
+      ),
+      new Tile(
+        this.map,
+        this.z + 1,
+        this.x * 2 + 1,
+        this.y * 2 + 1,
+        this.materialOptions
+      )
     ]
   }
 
   buildMaterial() {
     const urls = this.childrens().map((tile) => tile.mapUrl())
-    return QuadTextureMaterial(urls)
+    return QuadTextureMaterial(urls, this.materialOptions)
   }
 
   buildmesh() {
@@ -328,10 +302,11 @@ class Tile {
 }
 
 class Map {
-  constructor(source, geoLocation, options = {}) {
+  constructor(source, geoLocation, options = {}, materialOptions = {}) {
     this.source = source
     this.geoLocation = geoLocation
 
+    this.materialOptions = materialOptions
     this.options = this.getOptions(options)
     this.nTiles = this.options.nTiles
     this.zoom = this.options.zoom
@@ -369,7 +344,8 @@ class Map {
           this,
           this.zoom,
           this.center.x + i - tileOffset,
-          this.center.y + j - tileOffset
+          this.center.y + j - tileOffset,
+          this.materialOptions
         )
         this.tileCache[tile.key()] = tile
       }
@@ -403,8 +379,8 @@ class Map {
       this.center,
       this.tileSize
     )
-    console.log({ x, y, z })
-    const tile = new Tile(this, this.zoom, x, y)
+    // console.log({ x, y, z })
+    const tile = new Tile(this, this.zoom, x, y, this.materialOptions)
 
     if (tile.key() in this.tileCache) return
 

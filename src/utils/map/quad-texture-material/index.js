@@ -4,9 +4,15 @@ import fragmentShader from './quadtexture_frag.glsl'
 
 const loader = new TextureLoader()
 
-const QuadTextureMaterial = (urls) => {
+const defaultOptions = {
+  lights: true,
+  wireframe: true,
+  fog: true
+}
+
+const QuadTextureMaterial = (urls, options) => {
   return Promise.all(urls.map((url) => loader.loadAsync(url))).then((maps) => {
-    return new ShaderMaterial({
+    const opts = {
       uniforms: {
         mapNW: { value: maps[0] },
         mapSW: { value: maps[1] },
@@ -21,9 +27,12 @@ const QuadTextureMaterial = (urls) => {
       defines: {
         USE_MAP: true,
         USE_UV: true
-      },
-      lights: true,
-      fog: true
+      }
+    }
+
+    return new ShaderMaterial({
+      ...opts,
+      ...Object.assign(defaultOptions, options)
     })
   })
 }

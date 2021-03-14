@@ -7,7 +7,7 @@ export default function Light() {
       <directionalLight
         castShadow={true}
         color='#ffffff'
-        intensity={0.5}
+        intensity={0.75}
         position={[10e3, 10e3, 10e3]}
       />
     </>
