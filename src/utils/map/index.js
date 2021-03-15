@@ -367,10 +367,6 @@ class Map {
     })
   }
 
-  tile2position([posX, posY, posZ]) {
-    return Utils.tile2position(posZ, posX, posY, this.center, this.tileSize)
-  }
-
   addFromPosition(posX, posY) {
     const { x, y, z } = Utils.position2tile(
       this.zoom,
