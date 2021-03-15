@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { useFrame } from 'react-three-fiber'
 import { Map, Source } from '../../utils/map'
 
-const position = { lat: 27.988056, lng: 86.925278, alt: 8840 }
-
 function Box(props) {
   // This reference will give us direct access to the mesh
   const mesh = React.useRef()
@@ -22,9 +20,9 @@ function Box(props) {
       {...props}
       ref={mesh}
       scale={active ? [1.5, 1.5, 1.5] : [1, 1, 1]}
-      onClick={(event) => setActive(!active)}
-      onPointerOver={(event) => setHover(true)}
-      onPointerOut={(event) => setHover(false)}
+      onClick={() => setActive(!active)}
+      onPointerOver={() => setHover(true)}
+      onPointerOut={() => setHover(false)}
     >
       <boxBufferGeometry args={[10, 10, 10]} />
       <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
@@ -32,21 +30,28 @@ function Box(props) {
   )
 }
 
-export default function Terrain() {
+export default function Terrain({ race }) {
   const [map, setMap] = useState(null)
   const [boxCoords, setBoxCoords] = useState(null)
 
   useEffect(() => {
-    const { lat, lng, alt } = position
+    const { location: locationObj } = race
+    const { data: location } = locationObj
+    const { latitude, longitude, zoom_index: zoom } = location
 
     const source = new Source('mapbox', process.env.REACT_APP_MAPBOX_TOKEN)
-    const instance = new Map(source, [lat, lng], {})
+    const instance = new Map(source, [latitude, longitude], {
+      zoom,
+      zScale: 0.075 // TODO: REFACTORING
+    })
     setMap(instance)
 
+    /*
     setTimeout(() => {
       const coords = instance.getProjection([lat, lng, alt])
       setBoxCoords(coords)
     }, 2e3)
+    */
   }, [])
 
   return (

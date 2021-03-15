@@ -1,10 +1,16 @@
 import React from 'react'
-import Scene from './scene'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+
+import History from '../pages/history'
 
 export default function App() {
   return (
-    <div>
-      <Scene />
-    </div>
+    <Router>
+      <Switch>
+        <Route path='/:raceId/history'>
+          <History />
+        </Route>
+      </Switch>
+    </Router>
   )
 }

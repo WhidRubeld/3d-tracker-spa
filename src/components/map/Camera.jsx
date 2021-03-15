@@ -8,7 +8,7 @@ const Camera = forwardRef((props, ref) => {
       <PerspectiveCamera
         ref={ref}
         makeDefault
-        position={[0, -1.25e3, 7e2]}
+        position={[0, -1.25e3, 10e2]}
         fov={75}
         far={1e6}
         up={[0, 0, 1]}
