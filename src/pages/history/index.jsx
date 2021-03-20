@@ -1,16 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { Canvas, useResource } from 'react-three-fiber'
+import React, { useEffect, useState, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { Backdrop, CircularProgress } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { ApiService } from '../../services'
-
-import Grid from '../../components/map/Grid'
-import Camera from '../../components/map/Camera'
-import Light from '../../components/map/Light'
-import Terrain from '../../components/map/Terrain'
+import Scene from './extra/Scene'
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -22,6 +17,8 @@ const useStyles = makeStyles((theme) => ({
 export default function HistoryScreen() {
   const { raceId } = useParams()
   const [race, setRace] = useState(null)
+  const [map, setMap] = useState(null)
+  const [ready, setReady] = useState(false)
 
   const classes = useStyles()
 
@@ -33,20 +30,16 @@ export default function HistoryScreen() {
       })
   }, [])
 
-  const camera = useResource()
+  useEffect(() => {
+    if (map && !ready) {
+      setReady(true)
+    }
+  }, [map, ready])
 
   return (
     <>
-      <Canvas
-        style={{ height: '100vh', width: '100vw' }}
-        onCreated={(state) => state.gl.setClearColor('#000000')}
-      >
-        <Grid />
-        <Camera ref={camera} />
-        <Light />
-        {race && <Terrain race={race} />}
-      </Canvas>
-      <Backdrop className={classes.backdrop} open={!race}>
+      <Scene race={race} onReady={setMap} />
+      <Backdrop className={classes.backdrop} open={!ready}>
         <CircularProgress color='primary' />
       </Backdrop>
     </>
