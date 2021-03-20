@@ -32,7 +32,7 @@ export const historySlice = createSlice({
     reset: resetState,
     setSecond: (state, { payload }) => {
       const { entity } = state
-      if (entity && payload && payload > 0 && payload < entity.duration) {
+      if (entity && payload && payload > 0 && payload <= entity.duration) {
         state.second = payload
       }
     }
