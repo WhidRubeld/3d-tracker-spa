@@ -2,6 +2,7 @@ import getPixels from 'get-pixels'
 import { PlaneBufferGeometry, Mesh, MeshNormalMaterial, Group } from 'three'
 import tilebelt from '@mapbox/tilebelt'
 import QuadTextureMaterial from './quad-texture-material'
+import scales from './scales.json'
 
 const tileMaterial = new MeshNormalMaterial({ wireframe: true })
 
@@ -154,21 +155,22 @@ class Tile {
       this.map.options.tileSegments,
       this.map.options.tileSegments
     )
+    console.log(this)
     const nPosition = Math.sqrt(geometry.attributes.position.count)
     const nElevation = Math.sqrt(this.elevation.length)
     const ratio = nElevation / (nPosition - 1)
     let x, y
     for (let i = 0; i < geometry.attributes.position.count - nPosition; i++) {
-      // if (i % nPosition === 0 || i % nPosition === nPosition - 1) continue
       if (i % nPosition === nPosition - 1) continue
       x = Math.floor(i / nPosition)
       y = i % nPosition
-      geometry.attributes.position.setZ(
-        i,
+
+      const elevation =
         this.elevation[
           Math.round(Math.round(x * ratio) * nElevation + y * ratio)
         ] * this.map.options.zScale
-      )
+
+      geometry.attributes.position.setZ(i, elevation)
     }
     geometry.computeVertexNormals()
     this.geometry = geometry
@@ -323,19 +325,18 @@ class Map {
     nTiles: 3,
     zoom: 11,
     tileSize: 600,
-    tileSegments: 100,
-    zScale: 0.045
+    tileSegments: 100
   }
 
   getOptions(providedOptions) {
     const options = Object.assign({}, this.defaultOptions, providedOptions)
+    options.zScale = scales[options.zoom]
     options.tileSegments = Math.min(256, Math.round(options.tileSegments))
     return options
   }
 
   init() {
     this.center = Utils.geo2tile(this.geoLocation, this.zoom)
-    console.log({ loc: this.geoLocation, center: this.center })
     const tileOffset = Math.floor(this.nTiles / 2)
 
     for (let i = 0; i < this.nTiles; i++) {
