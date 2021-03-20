@@ -13,22 +13,33 @@ export const load = createAsyncThunk(
   }
 )
 
+const resetState = (state) => {
+  state.loading = false
+  state.entity = null
+  state.error = null
+  state.second = 0
+}
+
 export const historySlice = createSlice({
   name: 'history',
   initialState: {
     loading: true,
     entity: null,
-    error: null
+    error: null,
+    second: 0
   },
   reducers: {
-    reset: (state) => {
-      state.loading = null
-      state.entity = null
-      state.error = null
+    reset: resetState,
+    setSecond: (state, { payload }) => {
+      const { entity } = state
+      if (entity && payload && payload > 0 && payload < entity.duration) {
+        state.second = payload
+      }
     }
   },
   extraReducers: {
     [load.pending]: (state) => {
+      resetState(state)
       state.loading = true
     },
     [load.fulfilled]: (state, { payload }) => {
@@ -36,13 +47,12 @@ export const historySlice = createSlice({
       state.entity = payload
     },
     [load.rejected]: (state, { payload: error }) => {
+      resetState(state)
       state.error = error
-      state.entity = null
-      state.loading = false
     }
   }
 })
 
-export const { reset } = historySlice.actions
+export const { reset, setSecond } = historySlice.actions
 
 export default historySlice.reducer
