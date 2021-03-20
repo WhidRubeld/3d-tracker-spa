@@ -105,6 +105,13 @@ class Tile {
     this.x = x
     this.y = y
     this.size = this.map.options.tileSize
+    this.position = Utils.tile2position(
+      this.z,
+      this.x,
+      this.y,
+      this.map.center,
+      this.size
+    )
     this.baseURL = 'https://s3.amazonaws.com/elevation-tiles-prod/terrarium'
     this.shape = null
     this.elevation = null
@@ -155,7 +162,6 @@ class Tile {
       this.map.options.tileSegments,
       this.map.options.tileSegments
     )
-    console.log(this)
     const nPosition = Math.sqrt(geometry.attributes.position.count)
     const nElevation = Math.sqrt(this.elevation.length)
     const ratio = nElevation / (nPosition - 1)
@@ -228,20 +234,10 @@ class Tile {
         this.computeElevation(pixels)
         this.buildGeometry()
         this.buildmesh()
+        this.mesh.position.set(...Object.values(this.position))
         resolve(this)
       })
     })
-  }
-
-  setPosition(center) {
-    this.position = Utils.tile2position(
-      this.z,
-      this.x,
-      this.y,
-      center,
-      this.size
-    )
-    this.mesh.position.set(...Object.values(this.position))
   }
 
   resolveSeamY(neighbor) {
@@ -304,21 +300,18 @@ class Tile {
 }
 
 class Map {
-  constructor(source, geoLocation, options = {}, materialOptions = {}) {
+  constructor({ source, location, options = {}, material = {} }) {
     this.source = source
-    this.geoLocation = geoLocation
+    this.geoLocation = location
 
-    this.materialOptions = materialOptions
+    this.materialOptions = material
     this.options = this.getOptions(options)
     this.nTiles = this.options.nTiles
     this.zoom = this.options.zoom
     this.tileSize = this.options.tileSize
 
     this.terrain = new Group()
-
     this.tileCache = {}
-
-    this.init()
   }
 
   defaultOptions = {
@@ -335,7 +328,7 @@ class Map {
     return options
   }
 
-  init() {
+  init(callback = () => {}) {
     this.center = Utils.geo2tile(this.geoLocation, this.zoom)
     const tileOffset = Math.floor(this.nTiles / 2)
 
@@ -349,16 +342,19 @@ class Map {
           this.materialOptions
         )
         this.tileCache[tile.key()] = tile
+
+        if (i === this.nTiles - 1 && j === this.nTiles - 1) {
+          callback()
+        }
       }
     }
 
-    const promises = Object.values(this.tileCache).map((tile) =>
-      tile.fetch().then((tile) => {
-        tile.setPosition(this.center)
+    const promises = Object.values(this.tileCache).map((tile) => {
+      return tile.fetch().then((tile) => {
         this.terrain.add(tile.mesh)
         return tile
       })
-    )
+    })
 
     Promise.all(promises).then((tiles) => {
       tiles.reverse().forEach((tile) => {
@@ -366,17 +362,17 @@ class Map {
         tile.resolveSeams(this.tileCache)
       })
     })
+    // this.onReady()
   }
 
   addFromPosition(posX, posY) {
-    const { x, y, z } = Utils.position2tile(
+    const { x, y } = Utils.position2tile(
       this.zoom,
       posX,
       posY,
       this.center,
       this.tileSize
     )
-    // console.log({ x, y, z })
     const tile = new Tile(this, this.zoom, x, y, this.materialOptions)
 
     if (tile.key() in this.tileCache) return
@@ -385,7 +381,6 @@ class Map {
     tile
       .fetch()
       .then((tile) => {
-        tile.setPosition(this.center)
         this.terrain.add(tile.mesh)
       })
       .then(() => {
