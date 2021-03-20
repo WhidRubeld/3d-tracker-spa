@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
+import { useSelector, useDispatch } from 'react-redux'
+
 import { Backdrop, CircularProgress } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
-import { ApiService } from '../../services'
+import { load } from '../../store/history'
+
 import Scene from './extra/Scene'
 
 const useStyles = makeStyles((theme) => ({
@@ -16,18 +19,18 @@ const useStyles = makeStyles((theme) => ({
 
 export default function HistoryScreen() {
   const { raceId } = useParams()
-  const [race, setRace] = useState(null)
   const [map, setMap] = useState(null)
   const [ready, setReady] = useState(false)
 
   const classes = useStyles()
 
+  const dispatch = useDispatch()
+  const { entity } = useSelector((state) => state.history)
+
   useEffect(() => {
-    ApiService.getRace(raceId)
-      .then(setRace)
-      .catch(() => {
-        throw new Error('Race not found')
-      })
+    if (!entity || entity.id !== raceId) {
+      dispatch(load(raceId))
+    }
   }, [])
 
   useEffect(() => {
@@ -38,7 +41,7 @@ export default function HistoryScreen() {
 
   return (
     <>
-      <Scene race={race} onReady={setMap} />
+      <Scene race={entity} onReady={setMap} />
       <Backdrop className={classes.backdrop} open={!ready}>
         <CircularProgress color='primary' />
       </Backdrop>
