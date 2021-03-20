@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Canvas, useResource } from 'react-three-fiber'
 import { useParams } from 'react-router-dom'
 
-import { Button, Backdrop, CircularProgress } from '@material-ui/core'
+import { Backdrop, CircularProgress } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { ApiService } from '../../services'
@@ -47,7 +47,7 @@ export default function HistoryScreen() {
         {race && <Terrain race={race} />}
       </Canvas>
       <Backdrop className={classes.backdrop} open={!race}>
-        <CircularProgress color='inheiht' />
+        <CircularProgress color='primary' />
       </Backdrop>
     </>
   )
