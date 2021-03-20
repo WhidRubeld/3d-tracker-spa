@@ -25,13 +25,17 @@ export default function HistoryScreen() {
   const classes = useStyles()
 
   const dispatch = useDispatch()
-  const { entity } = useSelector((state) => state.history)
+  const { entity, error } = useSelector((state) => state.history)
 
   useEffect(() => {
     if (!entity || entity.id !== raceId) {
       dispatch(load(raceId))
     }
   }, [])
+
+  useEffect(() => {
+    if (error) console.log(error)
+  }, [error])
 
   useEffect(() => {
     if (map && !ready) {
