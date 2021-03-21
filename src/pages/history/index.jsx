@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { useSelector, useDispatch } from 'react-redux'
@@ -8,7 +8,9 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import { load } from '../../store/history'
 
-import Scene from './extra/Scene'
+import Appbar from './extra/Appbar'
+import Scene from './extra/Scene/index'
+import PlaybackPanel from './extra/PlaybackPanel'
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -34,7 +36,7 @@ export default function HistoryScreen() {
   }, [])
 
   useEffect(() => {
-    if (error) console.log(error)
+    if (error) throw new Error(error)
   }, [error])
 
   useEffect(() => {
@@ -45,9 +47,11 @@ export default function HistoryScreen() {
 
   return (
     <>
-      <Scene race={entity} onReady={setMap} />
+      <Appbar />
+      <Scene race={entity} onReady={setMap} ready={ready} />
+      {ready && <PlaybackPanel />}
       <Backdrop className={classes.backdrop} open={!ready}>
-        <CircularProgress color='primary' />
+        <CircularProgress color='inherit' />
       </Backdrop>
     </>
   )

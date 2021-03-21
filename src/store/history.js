@@ -30,10 +30,29 @@ export const historySlice = createSlice({
   },
   reducers: {
     reset: resetState,
+    increaseSecond: (state, { payload }) => {
+      if (
+        !!state.entity &&
+        payload &&
+        payload > 0 &&
+        state.second < state.entity.duration
+      ) {
+        if (state.second + payload <= state.entity.duration) {
+          state.second += payload
+        } else {
+          state.second = state.entity.duration
+        }
+      }
+    },
     setSecond: (state, { payload }) => {
-      const { entity } = state
-      if (entity && payload && payload > 0 && payload <= entity.duration) {
-        state.second = payload
+      if (!!state.entity && payload) {
+        if (payload <= 0) {
+          state.second = 0
+        } else if (payload > state.entity.duration) {
+          state.second = state.entity.duration
+        } else {
+          state.second = payload
+        }
       }
     }
   },
@@ -53,6 +72,6 @@ export const historySlice = createSlice({
   }
 })
 
-export const { reset, setSecond } = historySlice.actions
+export const { reset, increaseSecond, setSecond } = historySlice.actions
 
 export default historySlice.reducer
