@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 import Home from '../pages/home'
 import History from '../pages/history'
+import Watch from '../pages/watch'
 
 export default function Navigation() {
   return (
@@ -10,6 +11,9 @@ export default function Navigation() {
       <Switch>
         <Route path='/:raceId/history'>
           <History />
+        </Route>
+        <Route path='/:raceId/watch'>
+          <Watch />
         </Route>
         <Route path='/'>
           <Home />
