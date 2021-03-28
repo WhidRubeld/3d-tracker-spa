@@ -20,7 +20,7 @@ export default function HistoryScreen() {
   const { entity, error } = useSelector((state) => state.history)
 
   useEffect(() => {
-    if (!entity || entity.id !== raceId) {
+    if (!entity || entity.id !== parseInt(raceId, 10)) {
       dispatch(load({ raceId, payload: { with_movements: 1 } }))
     }
   }, [])

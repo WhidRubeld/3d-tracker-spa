@@ -18,7 +18,7 @@ export default function WatchScreen() {
   const { entity, error } = useSelector((state) => state.watch)
 
   useEffect(() => {
-    if (!entity || entity.id !== raceId) {
+    if (!entity || entity.id !== parseInt(raceId, 10)) {
       dispatch(load(raceId))
     }
   }, [])
