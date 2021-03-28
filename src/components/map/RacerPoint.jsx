@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef } from 'react'
 import { useFrame } from 'react-three-fiber'
 
 const CYLINDER_HEIGHT = 20

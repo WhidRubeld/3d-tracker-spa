@@ -107,7 +107,6 @@ export default function ShapeSubjectsHook(map, entity, second) {
     if (subjects) {
       const output = { racers: [], flags: [] }
       const { racers, flags } = subjects
-      console.log(output)
 
       generateSubjectForSecond(racers, output.racers, second)
       generateSubjectForSecond(flags, output.flags, second)
