@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function HistoryScreen() {
   const { raceId } = useParams()
-  const [map, setMap] = useState(null)
   const [ready, setReady] = useState(false)
 
   const classes = useStyles()
@@ -31,7 +30,7 @@ export default function HistoryScreen() {
 
   useEffect(() => {
     if (!entity || entity.id !== raceId) {
-      dispatch(load(raceId))
+      dispatch(load({ raceId, payload: { with_movements: 1 } }))
     }
   }, [])
 
@@ -39,16 +38,10 @@ export default function HistoryScreen() {
     if (error) throw new Error(error)
   }, [error])
 
-  useEffect(() => {
-    if (map && !ready) {
-      setReady(true)
-    }
-  }, [map, ready])
-
   return (
     <>
       <Appbar />
-      <Scene race={entity} onReady={setMap} ready={ready} />
+      <Scene race={entity} onReady={() => setReady(true)} ready={ready} />
       {ready && <PlaybackPanel />}
       <Backdrop className={classes.backdrop} open={!ready}>
         <CircularProgress color='inherit' />

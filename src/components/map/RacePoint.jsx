@@ -1,18 +1,18 @@
 import React, { useRef, useEffect } from 'react'
 import { useFrame } from 'react-three-fiber'
 
-const CYLINDER_HEIGHT = 75
-const CYLINDER_RADIUS = 12
-const SPHERE_RADIUS = 18
+const CYLINDER_HEIGHT = 20
+const CYLINDER_RADIUS = 2
+const SPHERE_RADIUS = 5
 
 const MAX_SCALE = 5
 const SCALE_DIFF = 0.03
 
-function CirclePoint({ color, ...props }) {
+function CylinderPoint(props) {
   return (
     <mesh {...props}>
       <cylinderGeometry args={[CYLINDER_RADIUS, 0, CYLINDER_HEIGHT, 50]} />
-      <meshStandardMaterial color={color} />
+      <meshStandardMaterial color='#cccccc' />
     </mesh>
   )
 }
@@ -60,14 +60,14 @@ export default function RacePoint({ color, ...props }) {
 
   return (
     <group ref={group} {...props}>
-      <CirclePoint color={color} position={[0, CYLINDER_HEIGHT / 2, 0]} />
+      <CylinderPoint position={[0, CYLINDER_HEIGHT / 2, 0]} />
       <SpherePoint
         color={color}
-        position={[0, CYLINDER_HEIGHT + SPHERE_RADIUS, 0]}
+        position={[0, CYLINDER_HEIGHT + SPHERE_RADIUS - SPHERE_RADIUS / 4, 0]}
       />
       <AnimatedSpherePoint
         color={color}
-        position={[0, CYLINDER_HEIGHT + SPHERE_RADIUS, 0]}
+        position={[0, CYLINDER_HEIGHT + SPHERE_RADIUS - SPHERE_RADIUS / 4, 0]}
       />
     </group>
   )

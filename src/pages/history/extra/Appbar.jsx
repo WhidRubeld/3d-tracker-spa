@@ -56,6 +56,7 @@ export default function ButtonAppBar() {
             edge='start'
             className={classes.menuButton}
             aria-label='menu'
+            disabled
           >
             <SettingsIcon />
           </IconButton>

@@ -3,7 +3,7 @@ import axios from 'axios'
 const API_URL = process.env.REACT_APP_API_URL
 
 const RACE_LIST_URL = `${API_URL}/admin/races`
-const RACE_SHOW_URL = (id) => `${API_URL}/races/${id}`
+const RACE_SHOW_URL = (id) => `${API_URL}/admin/races/${id}`
 
 export class ApiService {
   static getRaceList(page) {
@@ -15,10 +15,10 @@ export class ApiService {
     })
   }
 
-  static getRace(id) {
+  static getRace(id, params = {}) {
     return new Promise((resolve, reject) => {
       axios
-        .get(RACE_SHOW_URL(id))
+        .get(RACE_SHOW_URL(id), { params })
         .then((res) => resolve(res.data.data))
         .catch(reject)
     })

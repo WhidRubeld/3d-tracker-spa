@@ -3,9 +3,9 @@ import { ApiService } from '../services'
 
 export const load = createAsyncThunk(
   'history/load',
-  async (payload, { rejectWithValue }) => {
+  async ({ raceId, payload }, { rejectWithValue }) => {
     try {
-      const response = await ApiService.getRace(payload)
+      const response = await ApiService.getRace(raceId, payload)
       return response
     } catch (e) {
       return rejectWithValue(e)
@@ -45,7 +45,7 @@ export const historySlice = createSlice({
       }
     },
     setSecond: (state, { payload }) => {
-      if (!!state.entity && payload) {
+      if (!!state.entity && payload !== null) {
         if (payload <= 0) {
           state.second = 0
         } else if (payload > state.entity.duration) {

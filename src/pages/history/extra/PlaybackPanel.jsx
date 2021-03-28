@@ -109,6 +109,7 @@ export default function PlaybackPanel() {
   }
 
   function changeComplete(v) {
+    console.log(v)
     dispatch(setSecond(v))
   }
 
