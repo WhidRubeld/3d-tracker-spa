@@ -6,9 +6,9 @@ import { useSelector } from 'react-redux'
 import Grid from '../../../../components/map/Grid'
 import Camera from '../../../../components/map/Camera'
 import Light from '../../../../components/map/Light'
+import Terrain from '../../../../components/map/Terrain'
 
 import Subjects from './Subjects'
-import Terrain from './Terrain'
 import useShapeSubjects from './useShapeSubjects'
 
 export default function Scene({ ready, onReady }) {

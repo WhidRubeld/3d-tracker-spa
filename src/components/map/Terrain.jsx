@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react'
-import { Map, Source } from '../../../../utils/map'
+import { Map, Source } from '../../utils/map'
 
 export default function Terrain({ race, onReady, ready }) {
   const [map, setMap] = useState(null)
