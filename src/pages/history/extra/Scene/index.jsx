@@ -7,7 +7,7 @@ import Grid from '../../../../components/map/Grid'
 import Camera from '../../../../components/map/Camera'
 import Light from '../../../../components/map/Light'
 
-import Racers from './Racers'
+import Subjects from './Subjects'
 import Terrain from './Terrain'
 import useShapeSubjects from './useShapeSubjects'
 
@@ -35,7 +35,7 @@ export default function Scene({ ready, onReady }) {
         {entity && (
           <Terrain race={entity} ready={ready} onReady={finishLoadTerrain} />
         )}
-        <Racers subjects={subjects} />
+        <Subjects subjects={subjects} />
       </Canvas>
     </>
   )

@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react'
-import RacePoint from '../../../../components/map/RacePoint'
+import RacerPoint from '../../../../components/map/RacerPoint'
 
-export default function Racers({ subjects }) {
+export default function Subjects({ subjects }) {
   if (subjects) {
     return (
       <>
@@ -11,7 +11,7 @@ export default function Racers({ subjects }) {
           const { movement } = tracker
           if (movement) {
             return (
-              <RacePoint
+              <RacerPoint
                 color={`#${tracker.color_hex}`}
                 position={movement.position}
                 key={index}
