@@ -53,7 +53,7 @@ function AnimatedSpherePoint({ color, ...props }) {
   )
 }
 
-export default function RacePoint({ color, ...props }) {
+export default function RacerPoint({ color, ...props }) {
   return (
     <group rotation={[Math.PI / 2, 0, 0]} {...props}>
       <CylinderPoint position={[0, CYLINDER_HEIGHT / 2, 0]} />

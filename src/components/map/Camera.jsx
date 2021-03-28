@@ -1,5 +1,4 @@
 import React, { forwardRef } from 'react'
-import { useResource } from 'react-three-fiber'
 import { MapControls, PerspectiveCamera } from '@react-three/drei'
 
 const Camera = forwardRef((props, ref) => {
