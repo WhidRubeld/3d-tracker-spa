@@ -48,5 +48,5 @@ export default function WatchSocketProvider(props) {
     } else if (entity && !raceId) startChannel()
   }, [entity, raceId])
 
-  return <WatchSocketContext.Provider {...props} />
+  return <WatchSocketContext.Provider value={{}} {...props} />
 }
