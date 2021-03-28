@@ -13,7 +13,7 @@ export default function Terrain({ race, onReady, ready }) {
         source: new Source('mapbox', process.env.REACT_APP_MAPBOX_TOKEN),
         location: [latitude, longitude],
         options: { zoom },
-        material: { wireframe: true }
+        material: { wireframe: false }
       })
     )
   }, [])

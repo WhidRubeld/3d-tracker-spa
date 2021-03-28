@@ -9,11 +9,14 @@ import Light from '../../../../components/map/Light'
 
 import Racers from './Racers'
 import Terrain from './Terrain'
+import useShapeSubjects from './useShapeSubjects'
 
 export default function Scene({ ready, onReady }) {
   const { entity, second } = useSelector((state) => state.history)
   const [map, setMap] = useState(null)
   const camera = useResource()
+
+  const subjects = useShapeSubjects(map, entity, second)
 
   function finishLoadTerrain(v) {
     setMap(v)
@@ -32,7 +35,7 @@ export default function Scene({ ready, onReady }) {
         {entity && (
           <Terrain race={entity} ready={ready} onReady={finishLoadTerrain} />
         )}
-        {ready && <Racers race={entity} second={second} map={map} />}
+        <Racers subjects={subjects} />
       </Canvas>
     </>
   )
