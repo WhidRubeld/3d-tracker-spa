@@ -1,10 +1,10 @@
 import React from 'react'
 
-const CYLINDER_HEIGHT = 20
-const CYLINDER_RADIUS = 0.5
+const CYLINDER_HEIGHT = 35
+const CYLINDER_RADIUS = 0.75
 
-const CONE_RADIUS = 3
-const CONE_HEIGHT = 10
+const CONE_RADIUS = 5
+const CONE_HEIGHT = 20
 const CONE_RADICAL_SEGMENTS = 2
 const CONE_HEIGHT_SEGMENTS = 1
 
