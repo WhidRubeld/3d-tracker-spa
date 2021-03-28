@@ -4,12 +4,14 @@ import {
   Toolbar,
   Typography,
   IconButton,
+  Chip,
   makeStyles
 } from '@material-ui/core'
 import { Link as RouterLink } from 'react-router-dom'
 import {
   ArrowBack as ArrowBackIcon,
-  Settings as SettingsIcon
+  SettingsInputAntenna as SettingsInputAntennaIcon,
+  History as HistoryIcon
 } from '@material-ui/icons'
 
 import { useSelector } from 'react-redux'
@@ -21,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   backButton: {
     marginRight: theme.spacing(2)
   },
-  menuButton: {
+  statusButton: {
     marginLeft: 'auto'
   },
   title: {
@@ -29,10 +31,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function ButtonAppBar() {
+export default function Appbar({ runtime = false }) {
   const classes = useStyles()
 
-  const { entity } = useSelector((state) => state.history)
+  const { entity } = useSelector(
+    (state) => state[runtime ? 'watch' : 'history']
+  )
 
   return (
     <div className={classes.root}>
@@ -52,14 +56,19 @@ export default function ButtonAppBar() {
               {entity.title}
             </Typography>
           )}
-          <IconButton
-            edge='start'
-            className={classes.menuButton}
-            aria-label='menu'
-            disabled
-          >
-            <SettingsIcon />
-          </IconButton>
+          <Chip
+            icon={
+              runtime ? (
+                <SettingsInputAntennaIcon fontSize='small' />
+              ) : (
+                <HistoryIcon fontSize='small' />
+              )
+            }
+            label={runtime ? 'Режим отслеживания' : 'Режим истории'}
+            color='primary'
+            variant='outlined'
+            className={classes.statusButton}
+          />
         </Toolbar>
       </AppBar>
     </div>

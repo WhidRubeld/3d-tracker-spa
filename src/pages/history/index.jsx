@@ -9,7 +9,8 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import { load } from '../../store/history'
 
-import Appbar from './extra/Appbar'
+import Appbar from '../../components/Appbar'
+
 import Scene from './extra/Scene/index'
 import PlaybackPanel from './extra/PlaybackPanel'
 
@@ -41,7 +42,7 @@ export default function HistoryScreen() {
 
   return (
     <>
-      <Appbar />
+      <Appbar runtime={false} />
       <Scene race={entity} onReady={() => setReady(true)} ready={ready} />
       {ready && <PlaybackPanel />}
       <Backdrop className={classes.backdrop} open={!ready}>

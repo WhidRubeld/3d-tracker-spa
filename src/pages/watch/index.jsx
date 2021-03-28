@@ -9,6 +9,8 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import { load } from '../../store/watch'
 
+import Appbar from '../../components/Appbar'
+
 import Scene from './extra/Scene/index'
 
 const useStyles = makeStyles((theme) => ({
@@ -39,6 +41,7 @@ export default function WatchScreen() {
 
   return (
     <>
+      <Appbar runtime={true} />
       <Scene race={entity} onReady={() => setReady(true)} ready={ready} />
       <Backdrop className={classes.backdrop} open={!ready}>
         <CircularProgress color='inherit' />

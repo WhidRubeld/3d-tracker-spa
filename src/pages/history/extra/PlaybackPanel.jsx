@@ -114,8 +114,8 @@ export default function PlaybackPanel() {
 
   function rewind() {
     const res = second - skipValue
-    if (!isStart) dispatch(setSecond(res))
     if (res < 0) setCurrentSecond(0)
+    if (!isStart) dispatch(setSecond(res))
   }
 
   function forward() {
