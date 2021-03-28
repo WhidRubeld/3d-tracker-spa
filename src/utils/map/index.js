@@ -403,6 +403,11 @@ class Map {
   }
 
   getProjection([lat, lng, alt]) {
+    /*
+     * TODO
+     * Добавить автозагрузку тайтлов
+     * Добавить автоопрдеелние позиции и размеров не сгенерированного тайтла
+     */
     const { tileCache, tileSize, options } = this
     const { zScale } = options
 
