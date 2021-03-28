@@ -1,13 +1,16 @@
 import React from 'react'
 import { Provider } from 'react-redux'
 
-import Navigation from './navigation'
 import store from '../store'
+import WatchSocketProvider from '../providers/watchSocketProvider'
+import Navigation from './navigation'
 
 export default function App() {
   return (
     <Provider store={store}>
-      <Navigation />
+      <WatchSocketProvider>
+        <Navigation />
+      </WatchSocketProvider>
     </Provider>
   )
 }

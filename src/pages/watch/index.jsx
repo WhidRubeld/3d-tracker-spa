@@ -1,41 +1,48 @@
-import React, { useEffect } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import Pusher from 'pusher-js'
-import Echo from 'laravel-echo'
 
-window.Pusher = Pusher
+import { useSelector, useDispatch } from 'react-redux'
 
-const options = {
-  broadcaster: 'pusher',
-  key: process.env.REACT_APP_PUSHER_KEY,
-  cluster: process.env.REACT_APP_PUSHER_CLUSTER,
-  host: `${process.env.REACT_APP_API_HOST}:6001`
-}
+import { Backdrop, CircularProgress } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
 
-const echo = new Echo(options)
+import { load } from '../../store/watch'
 
-export default function WatchSceen() {
+import Scene from './extra/Scene/index'
+
+const useStyles = makeStyles((theme) => ({
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff'
+  }
+}))
+
+export default function WatchScreen() {
   const { raceId } = useParams()
+  const [ready, setReady] = useState(false)
+
+  const classes = useStyles()
+
+  const dispatch = useDispatch()
+  const { entity, error } = useSelector((state) => state.watch)
 
   useEffect(() => {
-    if (raceId) {
-      echo
-        .channel(`race.${raceId}`)
-        .listen('.new-position', (e) => {
-          console.log(e)
-        })
-        .subscribed(() => {
-          console.log('Websockets: Subscribe ready')
-        })
-        .error((e) => {
-          throw new Error(e)
-        })
-
-      return () => {
-        echo.leaveChannel(`race.${raceId}`)
-      }
+    if (!entity || entity.id !== raceId) {
+      dispatch(load(raceId))
     }
-  }, [raceId])
+  }, [])
 
-  return <h1>hello</h1>
+  useEffect(() => {
+    if (error) throw new Error(error)
+  }, [error])
+
+  return (
+    <>
+      <Scene race={entity} onReady={() => setReady(true)} ready={ready} />
+      <Backdrop className={classes.backdrop} open={!ready}>
+        <CircularProgress color='inherit' />
+      </Backdrop>
+    </>
+  )
 }

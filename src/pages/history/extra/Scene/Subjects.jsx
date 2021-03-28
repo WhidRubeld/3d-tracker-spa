@@ -9,11 +9,11 @@ export default function Subjects({ subjects }) {
       <>
         {subjects.racers.map((racer, index) => {
           const { tracker } = racer
-          const { movement } = tracker
+          const { movement, color_hex } = tracker
           if (movement) {
             return (
               <RacerPoint
-                color={`#${tracker.color_hex}`}
+                color={`#${color_hex}`}
                 position={movement.position}
                 key={index}
               />
@@ -23,11 +23,11 @@ export default function Subjects({ subjects }) {
         })}
         {subjects.flags.map((flag, index) => {
           const { tracker } = flag
-          const { movement } = tracker
+          const { movement, color_hex } = tracker
           if (movement) {
             return (
               <FlagPoint
-                color={`#${tracker.color_hex}`}
+                color={`#${color_hex}`}
                 position={movement.position}
                 key={index}
               />
