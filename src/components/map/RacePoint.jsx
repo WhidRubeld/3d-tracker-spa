@@ -12,7 +12,7 @@ function CylinderPoint(props) {
   return (
     <mesh {...props}>
       <cylinderGeometry args={[CYLINDER_RADIUS, 0, CYLINDER_HEIGHT, 50]} />
-      <meshStandardMaterial color='#cccccc' />
+      <meshStandardMaterial color='#000000' />
     </mesh>
   )
 }
@@ -30,17 +30,19 @@ function AnimatedSpherePoint({ color, ...props }) {
   const mesh = useRef()
 
   useFrame(() => {
-    let { x: scale } = mesh.current.scale
-    let opacity = 1
+    if (!!mesh.current) {
+      let { x: scale } = mesh.current.scale
+      let opacity = 1
 
-    if (scale >= MAX_SCALE) mesh.current.scale.set(1, 1, 1)
-    else {
-      scale += SCALE_DIFF
-      opacity -= scale / MAX_SCALE
-      mesh.current.scale.set(scale, scale, scale)
+      if (scale >= MAX_SCALE) mesh.current.scale.set(1, 1, 1)
+      else {
+        scale += SCALE_DIFF
+        opacity -= scale / MAX_SCALE
+        mesh.current.scale.set(scale, scale, scale)
+      }
+
+      mesh.current.material.opacity = opacity
     }
-
-    mesh.current.material.opacity = opacity
   })
 
   return (
