@@ -19,6 +19,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux'
 
 import { setSecond, increaseSecond } from '../../../store/history'
+import { secondConvertor } from '../../../heleprs'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -64,10 +65,6 @@ const useStyles = makeStyles((theme) => ({
 const playbackSpeed = [1, 2, 3]
 const skipValue = 30
 
-const secondConvertor = (v) => {
-  return new Date(v * 1e3).toISOString().substr(11, 8)
-}
-
 export default function PlaybackPanel() {
   const classes = useStyles()
 
@@ -107,6 +104,14 @@ export default function PlaybackPanel() {
       setIsPlaying(true)
     }
   }
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current)
+      }
+    }
+  }, [])
 
   function changeComplete(v) {
     dispatch(setSecond(v))
