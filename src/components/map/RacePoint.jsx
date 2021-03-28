@@ -54,14 +54,8 @@ function AnimatedSpherePoint({ color, ...props }) {
 }
 
 export default function RacePoint({ color, ...props }) {
-  const group = useRef()
-
-  useEffect(() => {
-    group.current.rotation.set(Math.PI / 2, 0, 0)
-  }, [])
-
   return (
-    <group ref={group} {...props}>
+    <group rotation={[Math.PI / 2, 0, 0]} {...props}>
       <CylinderPoint position={[0, CYLINDER_HEIGHT / 2, 0]} />
       <SpherePoint
         color={color}
