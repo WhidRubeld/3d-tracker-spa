@@ -46,18 +46,8 @@ class Utils {
     }
   }
 
-  static position2tile(z, x, y, center, tileSize) {
-    const centerPosition = Utils.tile2position(
-      z,
-      center.x,
-      center.y,
-      center,
-      tileSize
-    )
-
-    const deltaX = Math.round((x - centerPosition.x) / tileSize)
-    const deltaY = Math.round(-(y - centerPosition.y) / tileSize)
-    return { x: deltaX + center.x, y: deltaY + center.y, z }
+  static getTileKey(z, x, y) {
+    return `${z}/${x}/${y}`
   }
 }
 class Source {
@@ -121,7 +111,7 @@ class Tile {
   }
 
   key() {
-    return `${this.z}/${this.x}/${this.y}`
+    return Utils.getTileKey(this.z, this.x, this.y)
   }
   keyNeighX() {
     return `${this.z}/${this.x + 1}/${this.y}`
@@ -365,14 +355,7 @@ class Map {
     // this.onReady()
   }
 
-  addFromPosition(posX, posY) {
-    const { x, y } = Utils.position2tile(
-      this.zoom,
-      posX,
-      posY,
-      this.center,
-      this.tileSize
-    )
+  addTileSegment(x, y) {
     const tile = new Tile(this, this.zoom, x, y, this.materialOptions)
 
     if (tile.key() in this.tileCache) return
@@ -402,49 +385,28 @@ class Map {
     this.tileCache = {}
   }
 
-  getProjection([lat, lng, alt]) {
-    /*
-     * TODO
-     * Добавить автозагрузку тайтлов
-     * Добавить автоопрдеелние позиции и размеров не сгенерированного тайтла
-     */
-    const { tileCache, tileSize, options } = this
+  getProjection([lat, lng, alt], providedOptions) {
+    const defaultOptions = { loadTile: true }
+    const opts = Object.assign({}, defaultOptions, providedOptions)
+
+    const { options, zoom, tileCache, center, tileSize } = this
     const { zScale } = options
 
-    let condidate = null
-    for (let index in tileCache) {
-      const tile = tileCache[index]
-      const { x, y, z, position } = tile
+    const [x, y, z] = tilebelt.pointToTile(lng, lat, zoom)
+    const tileKey = Utils.getTileKey(z, x, y)
 
-      const box = tilebelt.tileToBBOX([x, y, z])
-      const [w, s, e, n] = box
+    if (opts.loadTile && !(tileKey in tileCache)) this.addTileSegment(x, y)
 
-      const status = s < lat && lat < n && w < lng && lng < e
+    const [w, s, e, n] = tilebelt.tileToBBOX([x, y, z])
+    const position = Utils.tile2position(z, x, y, center, tileSize)
 
-      if (status) {
-        condidate = {
-          center: position,
-          coords: [lat, lng, alt],
-          box
-        }
-      }
-    }
+    const xStart = position.x - tileSize / 2
+    const yStart = position.y - tileSize / 2
 
-    if (condidate) {
-      const { box, center, coords } = condidate
-      const [lat, lng] = coords
-      const [w, s, e, n] = box
+    const xOffset = tileSize * (1 - (e - lng) / (e - w))
+    const yOffset = tileSize * (1 - (n - lat) / (n - s))
 
-      const xStart = center.x - tileSize / 2
-      const yStart = center.y - tileSize / 2
-
-      const xOffset = tileSize * (1 - (e - lng) / (e - w))
-      const yOffset = tileSize * (1 - (n - lat) / (n - s))
-
-      return [xStart + xOffset, yStart + yOffset, alt * zScale]
-    }
-
-    return null
+    return [xStart + xOffset, yStart + yOffset, alt * zScale]
   }
 }
 
