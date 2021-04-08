@@ -13,6 +13,13 @@ export const next = createAsyncThunk(
   }
 )
 
+const resetState = (state) => {
+  state.pagination = {}
+  state.loading = true
+  state.entities = []
+  state.ready = false
+}
+
 export const listSlice = createSlice({
   name: 'list',
   initialState: {
@@ -21,12 +28,12 @@ export const listSlice = createSlice({
     entities: [],
     ready: false
   },
-  reducers: {},
+  reducers: {
+    reset: resetState
+  },
   extraReducers: {
-    [next.pending]: (state, action) => {
-      if (!state.loading) {
-        state.loading = true
-      }
+    [next.pending]: (state, { payload }) => {
+      state.loading = true
     },
     [next.fulfilled]: (state, { payload }) => {
       const { data, meta } = payload
@@ -42,5 +49,7 @@ export const listSlice = createSlice({
     }
   }
 })
+
+export const { reset } = listSlice.actions
 
 export default listSlice.reducer

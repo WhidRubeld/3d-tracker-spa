@@ -9,6 +9,7 @@ import {
   Grid
 } from '@material-ui/core'
 
+import { useSelector, useDispatch } from 'react-redux'
 import { useSnackbar } from 'notistack'
 
 import moment from 'moment'
@@ -24,6 +25,10 @@ import LoadingButton from '../../components/LoadingButton'
 import { ApiService } from '../../services'
 import { convertTime } from '../../heleprs'
 
+import { reset as resetList } from '../../store/list'
+import { load as loadHistory } from '../../store/history'
+import { load as loadWatch } from '../../store/watch'
+
 const defaultValues = {
   title: null,
   description: null,
@@ -38,6 +43,10 @@ const defaultValues = {
 
 export default function ManageRaceModal({ race, open, onClose, onSuccess }) {
   const { enqueueSnackbar } = useSnackbar()
+
+  const dispatch = useDispatch()
+  const { entity: historyEntity } = useSelector((state) => state.history)
+  const { entity: watchEntity } = useSelector((state) => state.watch)
 
   const [isOpen, setIsOpen] = useState(false)
   const [form, setForm] = useState(defaultValues)
@@ -90,7 +99,7 @@ export default function ManageRaceModal({ race, open, onClose, onSuccess }) {
       : ApiService.updateRace(race.id, payload)
 
     promise
-      .then((race) => {
+      .then((instance) => {
         setIsOpen(false)
         onClose()
         enqueueSnackbar(
@@ -101,7 +110,19 @@ export default function ManageRaceModal({ race, open, onClose, onSuccess }) {
             variant: 'success'
           }
         )
-        onSuccess(race)
+
+        if (race) {
+          if (historyEntity && historyEntity.id === race.id) {
+            dispatch(
+              loadHistory({ raceId: race.id, payload: { with_movements: 1 } })
+            )
+          }
+          if (watchEntity && watchEntity.id === race.id) {
+            dispatch(loadWatch(race.id))
+          }
+        } else dispatch(resetList())
+
+        onSuccess(instance)
       })
       .catch(() => {
         enqueueSnackbar(
