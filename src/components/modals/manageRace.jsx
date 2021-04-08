@@ -36,7 +36,7 @@ const defaultValues = {
   location_zoom_index: null
 }
 
-export default function CreateRaceModal({ race, open, onClose, onSuccess }) {
+export default function ManageRaceModal({ race, open, onClose, onSuccess }) {
   const { enqueueSnackbar } = useSnackbar()
 
   const [isOpen, setIsOpen] = useState(false)
@@ -47,7 +47,6 @@ export default function CreateRaceModal({ race, open, onClose, onSuccess }) {
     if (open) {
       setIsOpen(true)
       if (race) {
-        console.log(race)
         const { title, description, started_at, duration } = race
         const { data: location } = race.location
         const {
