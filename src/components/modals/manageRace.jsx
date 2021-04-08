@@ -161,7 +161,7 @@ export default function ManageRaceModal({ race, open, onClose, onSuccess }) {
           />
           <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils}>
             <Grid container spacing={3}>
-              <Grid item xs={4}>
+              <Grid item xs={12} md={4}>
                 <KeyboardDatePickerValidator
                   format='MM/DD/yyyy'
                   margin='normal'
@@ -182,7 +182,7 @@ export default function ManageRaceModal({ race, open, onClose, onSuccess }) {
                   okLabel='Завершить'
                 />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12} md={4}>
                 <KeyboardTimePickerValidator
                   margin='normal'
                   id='time-picker'
@@ -201,7 +201,7 @@ export default function ManageRaceModal({ race, open, onClose, onSuccess }) {
                   okLabel='Завершить'
                 />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12} md={4}>
                 <TextFieldValidator
                   margin='normal'
                   label='Длительность'
@@ -252,7 +252,7 @@ export default function ManageRaceModal({ race, open, onClose, onSuccess }) {
             fullWidth
           />
           <Grid container spacing={3}>
-            <Grid item xs={4}>
+            <Grid item xs={12} md={4}>
               <TextFieldValidator
                 margin='normal'
                 label='Широта'
@@ -271,7 +271,7 @@ export default function ManageRaceModal({ race, open, onClose, onSuccess }) {
                 fullWidth
               />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={12} md={4}>
               <TextFieldValidator
                 margin='normal'
                 label='Долгота'
@@ -290,7 +290,7 @@ export default function ManageRaceModal({ race, open, onClose, onSuccess }) {
                 fullWidth
               />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={12} md={4}>
               <TextFieldValidator
                 margin='normal'
                 label='Машстаб блока'
