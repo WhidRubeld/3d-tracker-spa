@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import {
   Container,
   CircularProgress,
@@ -26,6 +26,7 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import { next } from '../../store/list'
 import { convertTime, secondConvertor } from '../../heleprs'
+import CreateRaceFab from './extra/createRaceFab'
 
 const dateForHuman = (text) => convertTime(text).format('DD.MM.YY в HH:mm')
 
@@ -173,6 +174,8 @@ export default function HomeScreen() {
     return null
   }
 
+  const [modal, setModal] = useState(false)
+
   return (
     <Container>
       <Box
@@ -222,6 +225,7 @@ export default function HomeScreen() {
         )}
         {renderPager()}
       </Box>
+      <CreateRaceFab />
     </Container>
   )
 }
