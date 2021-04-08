@@ -3,7 +3,7 @@ import { Fab } from '@material-ui/core'
 import { Add as AddIcon } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 
-import ManageRaceModal from '../../../components/modals/manageRace'
+import ManageRaceModal from '../../../components/modals/ManageRaceModal'
 
 const useStyles = makeStyles((theme) => ({
   fab: {
