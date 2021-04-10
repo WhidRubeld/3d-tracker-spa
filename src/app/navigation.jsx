@@ -1,6 +1,9 @@
 import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
+import Appbar from '../components/Appbar'
+import Backdrop from '../components/Backdrop'
+
 import Home from '../pages/home'
 import History from '../pages/history'
 import Watch from '../pages/watch'
@@ -8,6 +11,7 @@ import Watch from '../pages/watch'
 export default function Navigation() {
   return (
     <Router>
+      <Appbar />
       <Switch>
         <Route path='/:raceId/history'>
           <History />
@@ -19,6 +23,7 @@ export default function Navigation() {
           <Home />
         </Route>
       </Switch>
+      <Backdrop />
     </Router>
   )
 }

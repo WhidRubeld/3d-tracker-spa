@@ -17,7 +17,7 @@ export const listSlice = createSlice({
   name: 'list',
   initialState: {
     pagination: {},
-    loading: true,
+    loading: false,
     entities: [],
     ready: false
   },

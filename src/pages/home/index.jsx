@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import {
   Container,
-  CircularProgress,
   Typography,
   Box,
   Grid,
@@ -23,7 +22,6 @@ import {
 } from '@material-ui/icons'
 
 import { Link as RouterLink } from 'react-router-dom'
-import GitHubButton from 'react-github-btn'
 
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -48,7 +46,7 @@ export default function HomeScreen() {
     if (!ready) {
       dispatch(load())
     }
-  }, [dispatch, loading, ready])
+  }, [dispatch, ready])
 
   function ListItem({ description, value, icon: Icon }) {
     return (
@@ -114,7 +112,7 @@ export default function HomeScreen() {
             color='primary'
             component={RouterLink}
             style={{ marginRight: 'auto' }}
-            to={`/${race.id}`}
+            to={`/${race.id}/details`}
           >
             Подробнее
           </Button>
@@ -156,28 +154,7 @@ export default function HomeScreen() {
   }
 
   return (
-    <Container>
-      <Box display='flex' paddingTop={2} paddingBottom={2}>
-        <GitHubButton
-          href='https://github.com/WhidRubeld/3d-tracker-api/subscription'
-          data-color-scheme='no-preference: dark; light: light; dark: dark;'
-          data-size='large'
-          data-show-count='true'
-          aria-label='Watch WhidRubeld/3d-tracker-api on GitHub'
-        >
-          API
-        </GitHubButton>
-        <div style={{ margin: '0 5px' }} />
-        <GitHubButton
-          href='https://github.com/WhidRubeld/3d-tracker-spa/subscription'
-          data-color-scheme='no-preference: dark; light: light; dark: dark;'
-          data-size='large'
-          data-show-count='true'
-          aria-label='Watch WhidRubeld/3d-tracker-spa on GitHub'
-        >
-          SPA
-        </GitHubButton>
-      </Box>
+    <Container style={{ marginTop: 30 }}>
       {renderRacesList()}
       <Box
         display='flex'
@@ -185,10 +162,9 @@ export default function HomeScreen() {
         marginTop={5}
         marginBottom={5}
       >
-        {!ready ? (
-          <CircularProgress size={30} />
-        ) : (
+        {ready && (
           <Pagination
+            color='primary'
             page={current_page}
             count={total_pages}
             disabled={loading}

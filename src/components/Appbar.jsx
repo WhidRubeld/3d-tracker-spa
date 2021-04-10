@@ -1,20 +1,15 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import {
   AppBar,
   Toolbar,
   Typography,
   IconButton,
-  Chip,
+  Box,
   makeStyles
 } from '@material-ui/core'
-import { Link as RouterLink } from 'react-router-dom'
-import {
-  ArrowBack as ArrowBackIcon,
-  SettingsInputAntenna as SettingsInputAntennaIcon,
-  History as HistoryIcon
-} from '@material-ui/icons'
-
-import { useSelector } from 'react-redux'
+import { useLocation, Link as RouterLink } from 'react-router-dom'
+import { ArrowBack as ArrowBackIcon } from '@material-ui/icons'
+import GitHubButton from 'react-github-btn'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,52 +18,77 @@ const useStyles = makeStyles((theme) => ({
   backButton: {
     marginRight: theme.spacing(2)
   },
-  statusButton: {
-    marginLeft: 'auto'
-  },
   title: {
     flexGrow: 1
   }
 }))
 
-export default function Appbar({ runtime = false }) {
-  const classes = useStyles()
+export default function Appbar() {
+  const route = useLocation()
+  const currentPage = useMemo(() => {
+    const { pathname } = route
+    if (pathname === '/') return 'home'
+    const ext = route.pathname.split('/').pop()
+    return ext
+  }, [route])
+  const isHome = currentPage === 'home'
 
-  const { entity } = useSelector(
-    (state) => state[runtime ? 'watch' : 'history']
-  )
+  const getTitle = () => {
+    switch (currentPage) {
+      case 'home':
+        return 'Список геолокаций'
+      case 'details':
+        return 'Детали геолокации'
+      case 'watch':
+        return 'Онлайн трансляция'
+      case 'history':
+        return 'Воспроизведение'
+      default:
+        return 'Страница не найдена'
+    }
+  }
+
+  const classes = useStyles()
 
   return (
     <div className={classes.root}>
-      <AppBar position='fixed' color='inherit'>
+      <AppBar position='static' color='inherit'>
         <Toolbar>
-          <IconButton
-            edge='start'
-            className={classes.backButton}
-            aria-label='back'
-            component={RouterLink}
-            to='/'
-          >
-            <ArrowBackIcon />
-          </IconButton>
-          {entity && (
-            <Typography variant='h6' className={classes.title}>
-              {entity.title}
-            </Typography>
+          {!isHome && (
+            <IconButton
+              edge='start'
+              className={classes.backButton}
+              aria-label='back'
+              component={RouterLink}
+              to='/'
+            >
+              <ArrowBackIcon />
+            </IconButton>
           )}
-          <Chip
-            icon={
-              runtime ? (
-                <SettingsInputAntennaIcon fontSize='small' />
-              ) : (
-                <HistoryIcon fontSize='small' />
-              )
-            }
-            label={runtime ? 'Режим отслеживания' : 'Режим истории'}
-            color='primary'
-            variant='outlined'
-            className={classes.statusButton}
-          />
+          <Typography variant='h6' className={classes.title}>
+            {getTitle()}
+          </Typography>
+          <Box display='flex' marginLeft='auto'>
+            <GitHubButton
+              href='https://github.com/WhidRubeld/3d-tracker-api/subscription'
+              data-color-scheme='no-preference: dark; light: light; dark: dark;'
+              data-size='large'
+              data-show-count='true'
+              aria-label='Watch WhidRubeld/3d-tracker-api on GitHub'
+            >
+              API
+            </GitHubButton>
+            <div style={{ margin: '0 5px' }} />
+            <GitHubButton
+              href='https://github.com/WhidRubeld/3d-tracker-spa/subscription'
+              data-color-scheme='no-preference: dark; light: light; dark: dark;'
+              data-size='large'
+              data-show-count='true'
+              aria-label='Watch WhidRubeld/3d-tracker-spa on GitHub'
+            >
+              SPA
+            </GitHubButton>
+          </Box>
         </Toolbar>
       </AppBar>
     </div>

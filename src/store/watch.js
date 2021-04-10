@@ -22,7 +22,7 @@ const resetState = (state) => {
 export const watchSlice = createSlice({
   name: 'watch',
   initialState: {
-    loading: true,
+    loading: false,
     entity: null,
     error: null
   },

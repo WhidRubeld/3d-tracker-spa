@@ -5,9 +5,6 @@ import { useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { load } from '../../store/watch'
 
-import Appbar from '../../components/Appbar'
-import Backdrop from '../../components/Backdrop'
-
 import Scene from './extra/Scene/index'
 
 export default function WatchScreen() {
@@ -27,11 +24,5 @@ export default function WatchScreen() {
     if (error) throw new Error(error)
   }, [error])
 
-  return (
-    <>
-      <Appbar runtime={true} />
-      <Scene race={entity} onReady={() => setReady(true)} ready={ready} />
-      <Backdrop ready={ready} />
-    </>
-  )
+  return <Scene race={entity} onReady={() => setReady(true)} ready={ready} />
 }

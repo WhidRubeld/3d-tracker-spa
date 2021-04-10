@@ -23,7 +23,7 @@ const resetState = (state) => {
 export const historySlice = createSlice({
   name: 'history',
   initialState: {
-    loading: true,
+    loading: false,
     entity: null,
     error: null,
     second: 0
