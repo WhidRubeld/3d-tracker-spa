@@ -4,7 +4,6 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   Grid
 } from '@material-ui/core'
@@ -149,10 +148,6 @@ export default function ManageRaceModal({ race, open, onClose, onSuccess }) {
           {!race ? 'Новое отслеживание' : 'Редактирование отслеживания'}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            To subscribe to this website, please enter your email address here.
-            We will send updates occasionally.
-          </DialogContentText>
           <TextFieldValidator
             autoFocus={!race}
             label='Название отслеживания'
