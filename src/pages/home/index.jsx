@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect } from 'react'
 import {
   Container,
   CircularProgress,
@@ -8,8 +8,11 @@ import {
   Card,
   CardActions,
   CardContent,
-  Button
+  Button,
+  IconButton,
+  Badge
 } from '@material-ui/core'
+import { Pagination } from '@material-ui/lab'
 import {
   EventAvailable as EventAvailableIcon,
   AccessTime as AccessTimeIcon,
@@ -24,7 +27,7 @@ import GitHubButton from 'react-github-btn'
 
 import { useSelector, useDispatch } from 'react-redux'
 
-import { next } from '../../store/list'
+import { load } from '../../store/list'
 import { convertTime, secondConvertor } from '../../heleprs'
 import CreateRaceFab from './extra/createRaceFab'
 
@@ -37,23 +40,13 @@ export default function HomeScreen() {
   const { entity: watchEntity } = useSelector((state) => state.watch)
   const { entity: historyEntity } = useSelector((state) => state.history)
 
-  const { current_page, total } = pagination
-
-  const isLastPage = useMemo(() => {
-    const { total_pages, current_page } = pagination
-
-    if (total_pages && current_page) {
-      return current_page === total_pages
-    }
-
-    return false
-  }, [pagination])
+  const { current_page, total_pages } = pagination
 
   const dispatch = useDispatch()
 
   useEffect(() => {
     if (!ready) {
-      dispatch(next())
+      dispatch(load())
     }
   }, [dispatch, loading, ready])
 
@@ -118,23 +111,33 @@ export default function HomeScreen() {
         </CardContent>
         <CardActions>
           <Button
-            size='small'
             color='primary'
-            startIcon={<SettingsInputAntennaIcon />}
             component={RouterLink}
-            to={`/${race.id}/watch`}
+            style={{ marginRight: 'auto' }}
+            to={`/${race.id}`}
           >
-            {!isWatch ? 'Следить' : 'Продолжить'}
+            Подробнее
           </Button>
-          <Button
-            size='small'
-            color='primary'
-            startIcon={<HistoryIcon />}
-            component={RouterLink}
-            to={`/${race.id}/history`}
-          >
-            {!isHistory ? 'Воспроизвести' : 'Продолжить'}
-          </Button>
+          <Badge variant={isWatch ? 'dot' : undefined} color='error'>
+            <IconButton
+              size='small'
+              color='primary'
+              component={RouterLink}
+              to={`/${race.id}/watch`}
+            >
+              <SettingsInputAntennaIcon fontSize='small' />
+            </IconButton>
+          </Badge>
+          <Badge variant={isHistory ? 'dot' : undefined} color='error'>
+            <IconButton
+              size='small'
+              color='primary'
+              component={RouterLink}
+              to={`/${race.id}/history`}
+            >
+              <HistoryIcon fontSize='small' />
+            </IconButton>
+          </Badge>
         </CardActions>
       </Card>
     )
@@ -152,78 +155,46 @@ export default function HomeScreen() {
     )
   }
 
-  function renderPager() {
-    if (loading) {
-      return <CircularProgress size={20} style={{ marginTop: 15 }} />
-    }
-
-    if (!isLastPage) {
-      return (
-        <Button
-          color='primary'
-          variant='contained'
-          size='small'
-          style={{ marginTop: 10 }}
-          onClick={() => dispatch(next())}
-        >
-          Загрузить еще
-        </Button>
-      )
-    }
-
-    return null
-  }
-
-  const [modal, setModal] = useState(false)
-
   return (
     <Container>
-      <Box
-        display='flex'
-        flexDirection='column'
-        alignItems='center'
-        padding={5}
-      >
-        <Typography variant='h2'>3D Tracker</Typography>
-        <Typography variant='overline' gutterBottom>
-          By Vasilev Gennady
-        </Typography>
-        <Box display='flex'>
-          <GitHubButton
-            href='https://github.com/WhidRubeld/3d-tracker-api/subscription'
-            data-color-scheme='no-preference: dark; light: light; dark: dark;'
-            data-size='large'
-            data-show-count='true'
-            aria-label='Watch WhidRubeld/3d-tracker-api on GitHub'
-          >
-            API
-          </GitHubButton>
-          <div style={{ margin: '0 5px' }} />
-          <GitHubButton
-            href='https://github.com/WhidRubeld/3d-tracker-spa/subscription'
-            data-color-scheme='no-preference: dark; light: light; dark: dark;'
-            data-size='large'
-            data-show-count='true'
-            aria-label='Watch WhidRubeld/3d-tracker-spa on GitHub'
-          >
-            SPA
-          </GitHubButton>
-        </Box>
+      <Box display='flex' paddingTop={2} paddingBottom={2}>
+        <GitHubButton
+          href='https://github.com/WhidRubeld/3d-tracker-api/subscription'
+          data-color-scheme='no-preference: dark; light: light; dark: dark;'
+          data-size='large'
+          data-show-count='true'
+          aria-label='Watch WhidRubeld/3d-tracker-api on GitHub'
+        >
+          API
+        </GitHubButton>
+        <div style={{ margin: '0 5px' }} />
+        <GitHubButton
+          href='https://github.com/WhidRubeld/3d-tracker-spa/subscription'
+          data-color-scheme='no-preference: dark; light: light; dark: dark;'
+          data-size='large'
+          data-show-count='true'
+          aria-label='Watch WhidRubeld/3d-tracker-spa on GitHub'
+        >
+          SPA
+        </GitHubButton>
       </Box>
       {renderRacesList()}
       <Box
         display='flex'
-        flexDirection='column'
-        alignItems='center'
+        justifyContent='center'
         marginTop={5}
         marginBottom={5}
       >
-        {current_page && (
-          <Typography variant='caption' display='block'>
-            Страница {current_page} из {total}
-          </Typography>
+        {!ready ? (
+          <CircularProgress size={30} />
+        ) : (
+          <Pagination
+            page={current_page}
+            count={total_pages}
+            disabled={loading}
+            onChange={(e, v) => dispatch(load(v))}
+          />
         )}
-        {renderPager()}
       </Box>
       <CreateRaceFab />
     </Container>

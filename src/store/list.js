@@ -1,17 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { ApiService } from '../services'
 
-export const next = createAsyncThunk(
-  'list/next',
-  async (payload, { getState }) => {
-    const { list } = getState()
-    const { pagination } = list
-    const { current_page = 0 } = pagination
-
-    const response = await ApiService.getRaceList(current_page + 1)
-    return response
-  }
-)
+export const load = createAsyncThunk('list/load', async (payload) => {
+  const response = await ApiService.getRaceList(payload || 1)
+  return response
+})
 
 const resetState = (state) => {
   state.pagination = {}
@@ -32,16 +25,16 @@ export const listSlice = createSlice({
     reset: resetState
   },
   extraReducers: {
-    [next.pending]: (state, { payload }) => {
+    [load.pending]: (state) => {
       state.loading = true
     },
-    [next.fulfilled]: (state, { payload }) => {
+    [load.fulfilled]: (state, { payload }) => {
       const { data, meta } = payload
       const { pagination } = meta
 
       state.loading = false
       state.pagination = pagination
-      state.entities = [...state.entities, ...data]
+      state.entities = data
 
       if (!state.ready) {
         state.ready = true
