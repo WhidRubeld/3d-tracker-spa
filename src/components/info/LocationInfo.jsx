@@ -1,10 +1,9 @@
 import React from 'react'
-import { List, ListSubheader, ListItem, ListItemText } from '@material-ui/core'
+import { List, ListItem, ListItemText } from '@material-ui/core'
 
 export default function LocationInfo({ location }) {
   return (
     <List>
-      <ListSubheader>Геолокация</ListSubheader>
       <ListItem>
         <ListItemText primary={location.name} secondary='Название' />
       </ListItem>

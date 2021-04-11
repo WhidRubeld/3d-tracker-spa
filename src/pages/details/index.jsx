@@ -11,9 +11,12 @@ import {
   Card,
   Typography,
   Box,
+  Chip,
   Button
 } from '@material-ui/core'
 import {
+  EventAvailable as EventAvailableIcon,
+  AccessTime as AccessTimeIcon,
   SettingsInputAntenna as SettingsInputAntennaIcon,
   History as HistoryIcon
 } from '@material-ui/icons'
@@ -23,18 +26,20 @@ import { load } from '../../store/details'
 import LocationInfo from '../../components/info/LocationInfo'
 import UpdateRaceFab from './extra/updateRaceFab'
 
+import { dateForHuman, secondConvertor } from '../../heleprs'
+
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: theme.spacing(2)
   },
-  title: {
-    marginBottom: theme.spacing(1)
+  dateChip: {
+    marginRight: theme.spacing(1)
   },
   watchButton: {
     marginRight: theme.spacing(1)
   },
   grid: {
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(1)
   }
 }))
 
@@ -65,32 +70,46 @@ export default function AlignItemsList() {
 
   return (
     <Container className={classes.root}>
-      <Typography className={classes.title} variant='h4'>
-        {entity.title}
-      </Typography>
-      <Button
-        className={classes.watchButton}
-        variant='contained'
-        color='primary'
-        size='small'
-        startIcon={<SettingsInputAntennaIcon />}
-        component={RouterLink}
-        to={`/${entity.id}/watch`}
-      >
-        {isWatch ? 'Продолжить' : 'Отслеживать'}
-      </Button>
-      <Button
-        variant='contained'
-        color='primary'
-        size='small'
-        startIcon={<HistoryIcon />}
-        component={RouterLink}
-        to={`/${entity.id}/history`}
-      >
-        {isHistory ? 'Продолжить' : 'Воспроизвести'}
-      </Button>
+      <Typography variant='h4'>{entity.title}</Typography>
+      <Box display='flex' marginBottom={1} marginTop={2}>
+        <Chip
+          className={classes.dateChip}
+          variant='outlined'
+          icon={<EventAvailableIcon />}
+          label={dateForHuman(entity.started_at)}
+        />
+        <Chip
+          variant='outlined'
+          icon={<AccessTimeIcon />}
+          label={secondConvertor(entity.duration)}
+        />
+      </Box>
+      <Box display='flex' marginBottom={1}>
+        <Button
+          className={classes.watchButton}
+          variant='contained'
+          color='primary'
+          size='small'
+          startIcon={<SettingsInputAntennaIcon />}
+          component={RouterLink}
+          to={`/${entity.id}/watch`}
+        >
+          {isWatch ? 'Продолжить' : 'Отслеживать'}
+        </Button>
+        <Button
+          variant='contained'
+          color='primary'
+          size='small'
+          startIcon={<HistoryIcon />}
+          component={RouterLink}
+          to={`/${entity.id}/history`}
+        >
+          {isHistory ? 'Продолжить' : 'Воспроизвести'}
+        </Button>
+      </Box>
       <Grid className={classes.grid} container spacing={3}>
         <Grid item xs={12} md={4}>
+          <Typography variant='overline'>Данные геолокации</Typography>
           <Card>
             <LocationInfo location={entity.location.data} />
           </Card>

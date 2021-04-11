@@ -26,10 +26,8 @@ import { Link as RouterLink } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { load } from '../../store/list'
-import { convertTime, secondConvertor } from '../../heleprs'
+import { dateForHuman, secondConvertor } from '../../heleprs'
 import CreateRaceFab from './extra/createRaceFab'
-
-const dateForHuman = (text) => convertTime(text).format('DD.MM.YY в HH:mm')
 
 export default function HomeScreen() {
   const { entities, loading, pagination, ready } = useSelector(
