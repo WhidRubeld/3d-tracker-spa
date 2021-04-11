@@ -25,25 +25,25 @@ import { ApiService } from '../../services'
 import { convertTime } from '../../heleprs'
 
 import { reset as resetList } from '../../store/list'
+import { update as updateDetails } from '../../store/details'
 import { load as loadHistory } from '../../store/history'
-import { load as loadWatch } from '../../store/watch'
+import { update as updateWatch } from '../../store/watch'
 
 const defaultValues = {
   title: null,
-  description: null,
   started_at: null,
   duration: null,
   location_name: null,
-  location_description: null,
   location_latitude: null,
   location_longitude: null,
   location_zoom_index: null
 }
 
-export default function ManageRaceModal({ race, open, onClose, onSuccess }) {
+export default function ManageRaceModal({ race, open, onClose }) {
   const { enqueueSnackbar } = useSnackbar()
 
   const dispatch = useDispatch()
+  const { entity: detailsEntity } = useSelector((state) => state.details)
   const { entity: historyEntity } = useSelector((state) => state.history)
   const { entity: watchEntity } = useSelector((state) => state.watch)
 
@@ -55,11 +55,10 @@ export default function ManageRaceModal({ race, open, onClose, onSuccess }) {
     if (open) {
       setIsOpen(true)
       if (race) {
-        const { title, description, started_at, duration } = race
+        const { title, started_at, duration } = race
         const { data: location } = race.location
         const {
           name: location_name,
-          description: location_description,
           latitude: location_latitude,
           longitude: location_longitude,
           zoom_index: location_zoom_index
@@ -67,11 +66,9 @@ export default function ManageRaceModal({ race, open, onClose, onSuccess }) {
 
         setForm({
           title,
-          description,
           started_at: convertTime(started_at).format('YYYY-MM-DD HH:mm:ss'),
           duration: duration,
           location_name,
-          location_description,
           location_latitude,
           location_longitude,
           location_zoom_index
@@ -111,17 +108,20 @@ export default function ManageRaceModal({ race, open, onClose, onSuccess }) {
         )
 
         if (race) {
+          if (detailsEntity && detailsEntity.id === race.id) {
+            dispatch(updateDetails(instance))
+          }
           if (historyEntity && historyEntity.id === race.id) {
             dispatch(
               loadHistory({ raceId: race.id, payload: { with_movements: 1 } })
             )
           }
           if (watchEntity && watchEntity.id === race.id) {
-            dispatch(loadWatch(race.id))
+            dispatch(updateWatch(instance))
           }
-        } else dispatch(resetList())
+        }
 
-        onSuccess(instance)
+        dispatch(resetList())
       })
       .catch(() => {
         enqueueSnackbar(
@@ -132,6 +132,9 @@ export default function ManageRaceModal({ race, open, onClose, onSuccess }) {
             variant: 'error'
           }
         )
+        setLoading(false)
+      })
+      .finally(() => {
         setLoading(false)
       })
   }
@@ -162,31 +165,17 @@ export default function ManageRaceModal({ race, open, onClose, onSuccess }) {
             required
             fullWidth
           />
-          <TextFieldValidator
-            margin='normal'
-            label='Описание отслеживания'
-            type='text'
-            value={form.description}
-            onChange={(event) =>
-              setForm((v) => ({ ...v, description: event.target.value }))
-            }
-            disabled={loading}
-            multiline
-            rows={4}
-            fullWidth
-          />
           <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils}>
             <Grid container spacing={3}>
               <Grid item xs={12} md={4}>
                 <KeyboardDatePickerValidator
-                  format='MM/DD/yyyy'
+                  format='DD/MM/yyyy'
                   margin='normal'
                   label='Дата начала'
                   value={form.started_at}
                   onChange={(started_at) =>
                     setForm((v) => ({ ...v, started_at }))
                   }
-                  minDate={new Date()}
                   KeyboardButtonProps={{
                     'aria-label': 'change date'
                   }}
@@ -249,22 +238,6 @@ export default function ManageRaceModal({ race, open, onClose, onSuccess }) {
             errorMessages={['Поле обязательно для заполнения']}
             disabled={loading}
             required
-            fullWidth
-          />
-          <TextFieldValidator
-            margin='normal'
-            label='Описание локации'
-            type='text'
-            value={form.location_description}
-            onChange={(event) =>
-              setForm((v) => ({
-                ...v,
-                location_description: event.target.value
-              }))
-            }
-            disabled={loading}
-            multiline
-            rows={4}
             fullWidth
           />
           <Grid container spacing={3}>

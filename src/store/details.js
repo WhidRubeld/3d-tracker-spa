@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { ApiService } from '../services'
 
 export const load = createAsyncThunk(
-  'watch/load',
+  'details/load',
   async (raceId, { rejectWithValue }) => {
     try {
       const response = await ApiService.getRace(raceId)
@@ -19,8 +19,8 @@ const resetState = (state) => {
   state.error = null
 }
 
-export const watchSlice = createSlice({
-  name: 'watch',
+export const detailsSlice = createSlice({
+  name: 'details',
   initialState: {
     loading: false,
     entity: null,
@@ -30,19 +30,6 @@ export const watchSlice = createSlice({
     reset: resetState,
     update: (state, { payload }) => {
       state.entity = payload
-    },
-    newPosition: (state, { payload }) => {
-      if (!!state.entity && payload) {
-        const { id, type, movement } = payload
-
-        const index = state.entity[`${type}s`].data
-          .map((item) => item.id)
-          .indexOf(id)
-
-        if (index !== -1) {
-          state.entity[`${type}s`].data[index].tracker.data.movement = movement
-        }
-      }
     }
   },
   extraReducers: {
@@ -61,6 +48,6 @@ export const watchSlice = createSlice({
   }
 })
 
-export const { reset, update, newPosition } = watchSlice.actions
+export const { reset, update } = detailsSlice.actions
 
-export default watchSlice.reducer
+export default detailsSlice.reducer

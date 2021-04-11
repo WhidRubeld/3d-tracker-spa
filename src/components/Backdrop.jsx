@@ -16,13 +16,14 @@ export default function CustomBackdrop({ ready }) {
   const classes = useStyles()
 
   const { loading: listLoading } = useSelector((state) => state.list)
+  const { loading: detailsLoading } = useSelector((state) => state.details)
   const { loading: watchLoading } = useSelector((state) => state.watch)
   const { loading: historyLoading } = useSelector((state) => state.history)
 
   return (
     <Backdrop
       className={classes.backdrop}
-      open={listLoading || watchLoading || historyLoading}
+      open={listLoading || detailsLoading || watchLoading || historyLoading}
     >
       <CircularProgress color='inherit' />
     </Backdrop>

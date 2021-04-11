@@ -35,6 +35,7 @@ export default function HomeScreen() {
   const { entities, loading, pagination, ready } = useSelector(
     (state) => state.list
   )
+  const { entity: detailsEntity } = useSelector((state) => state.details)
   const { entity: watchEntity } = useSelector((state) => state.watch)
   const { entity: historyEntity } = useSelector((state) => state.history)
 
@@ -72,6 +73,7 @@ export default function HomeScreen() {
   }
 
   function RaceCard({ race }) {
+    const isDetails = detailsEntity && detailsEntity.id === race.id
     const isWatch = watchEntity && watchEntity.id === race.id
     const isHistory = historyEntity && historyEntity.id === race.id
 
@@ -108,14 +110,20 @@ export default function HomeScreen() {
           />
         </CardContent>
         <CardActions>
-          <Button
-            color='primary'
-            component={RouterLink}
+          <Badge
+            variant={isDetails ? 'dot' : undefined}
             style={{ marginRight: 'auto' }}
-            to={`/${race.id}/details`}
+            color='error'
           >
-            Подробнее
-          </Button>
+            <Button
+              size='small'
+              color='primary'
+              component={RouterLink}
+              to={`/${race.id}/details`}
+            >
+              Подробнее
+            </Button>
+          </Badge>
           <Badge variant={isWatch ? 'dot' : undefined} color='error'>
             <IconButton
               size='small'

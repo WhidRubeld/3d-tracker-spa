@@ -8,7 +8,7 @@ export const load = createAsyncThunk('list/load', async (payload) => {
 
 const resetState = (state) => {
   state.pagination = {}
-  state.loading = true
+  state.loading = false
   state.entities = []
   state.ready = false
 }
