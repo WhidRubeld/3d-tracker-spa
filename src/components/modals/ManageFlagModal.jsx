@@ -45,13 +45,10 @@ export default function ManageFlagModal({ race, flag, open, onClose }) {
   const [form, setForm] = useState(defaultValues)
   const [loading, setLoading] = useState(false)
 
-  console.log(form)
-
   useEffect(() => {
     if (open) {
       setIsOpen(true)
       if (flag) {
-        console.log(flag)
         const { data: tracker } = flag.tracker
         setForm({
           label: flag.label,

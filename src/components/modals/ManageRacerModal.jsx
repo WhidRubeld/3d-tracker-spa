@@ -44,7 +44,6 @@ export default function ManageRacerModal({ race, racer, open, onClose }) {
       setIsOpen(true)
       if (racer) {
         const { data: tracker } = racer.tracker
-        console.log(tracker)
         setForm({
           name: racer.name,
           color_hex: tracker.color_hex
