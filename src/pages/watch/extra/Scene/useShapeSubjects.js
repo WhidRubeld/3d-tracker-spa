@@ -24,7 +24,7 @@ export default function ShapeSubjectsHook(map, entity) {
         const { data: tracker } = el.tracker
         const { movement } = tracker
 
-        if (movement) {
+        if (!Array.isArray(movement.data)) {
           const { latitude, longitude, altitude } = movement.data
           const position = map.getProjection([latitude, longitude, altitude])
           if (position) {
