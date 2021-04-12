@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link as RouterLink } from 'react-router-dom'
@@ -8,31 +8,24 @@ import { makeStyles } from '@material-ui/core/styles'
 import {
   Container,
   Grid,
-  Card,
   Typography,
   Box,
   Chip,
-  Button,
-  IconButton
+  Button
 } from '@material-ui/core'
 import {
   EventAvailable as EventAvailableIcon,
   AccessTime as AccessTimeIcon,
   SettingsInputAntenna as SettingsInputAntennaIcon,
-  History as HistoryIcon,
-  Add as AddIcon,
-  Edit as EditIcon
+  History as HistoryIcon
 } from '@material-ui/icons'
 
 import { load } from '../../store/details'
 
-import LocationInfo from '../../components/info/LocationInfo'
-import RacersInfo from '../../components/info/RacersInfo'
-import FlagsInfo from '../../components/info/FlagsInfo'
-
-import UpdateRaceFab from './extra/updateRaceFab'
-import ManageRacerModal from '../../components/modals/ManageRacerModal'
-import ManageFlagModal from '../../components/modals/ManageFlagModal'
+import UpdateRaceFab from './extra/UpdateRaceFab'
+import RacersCard from './extra/RacersCard'
+import FlagsCard from './extra/FlagsCard'
+import LocationCard from './extra/LocationCard'
 
 import { dateForHuman, secondConvertor } from '../../heleprs'
 
@@ -73,32 +66,6 @@ export default function AlignItemsList() {
   }, [error])
 
   const classes = useStyles()
-
-  const [racerModal, setRacerModal] = useState(false)
-  const [selectedRacer, setSelectedRacer] = useState(null)
-
-  const handleCloseRacerModal = () => {
-    setRacerModal(false)
-    setSelectedRacer(null)
-  }
-
-  const handleSelectRacer = (v) => {
-    setSelectedRacer(v)
-    setRacerModal(true)
-  }
-
-  const [flagModal, setFlagModal] = useState(false)
-  const [selectedFlag, setSelectedFlag] = useState(null)
-
-  const handleCloseFlagModal = () => {
-    setFlagModal(false)
-    setSelectedFlag(null)
-  }
-
-  const handleSelectFlag = (v) => {
-    setSelectedFlag(v)
-    setFlagModal(true)
-  }
 
   if (!entity) return null
 
@@ -143,77 +110,16 @@ export default function AlignItemsList() {
       </Box>
       <Grid className={classes.grid} container spacing={3}>
         <Grid item xs={12} md={4}>
-          <Typography variant='overline'>Данные геолокации</Typography>
-          <Card>
-            <LocationInfo location={entity.location.data} />
-          </Card>
+          <LocationCard entity={entity} />
         </Grid>
         <Grid item xs={12} md={4}>
-          <Box display='flex' justifyContent='space-between' paddingRight={2}>
-            <Typography variant='overline'>Список участников</Typography>
-            <IconButton
-              color='primary'
-              size='small'
-              onClick={() => setRacerModal(true)}
-            >
-              <AddIcon fontSize='small' />
-            </IconButton>
-          </Box>
-          <Card>
-            <RacersInfo
-              racers={entity.racers.data}
-              renderAction={(racer) => (
-                <IconButton
-                  color='primary'
-                  size='small'
-                  onClick={() => handleSelectRacer(racer)}
-                >
-                  <EditIcon fontSize='small' />
-                </IconButton>
-              )}
-            />
-          </Card>
+          <RacersCard entity={entity} />
         </Grid>
         <Grid item xs={12} md={4}>
-          <Box display='flex' justifyContent='space-between' paddingRight={2}>
-            <Typography variant='overline'>Список флагов</Typography>
-            <IconButton
-              color='primary'
-              size='small'
-              onClick={() => setFlagModal(true)}
-            >
-              <AddIcon fontSize='small' />
-            </IconButton>
-          </Box>
-          <Card>
-            <FlagsInfo
-              flags={entity.flags.data}
-              renderAction={(flag) => (
-                <IconButton
-                  color='primary'
-                  size='small'
-                  onClick={() => handleSelectFlag(flag)}
-                >
-                  <EditIcon fontSize='small' />
-                </IconButton>
-              )}
-            />
-          </Card>
+          <FlagsCard entity={entity} />
         </Grid>
       </Grid>
       <UpdateRaceFab />
-      <ManageRacerModal
-        race={entity}
-        racer={selectedRacer}
-        open={racerModal}
-        onClose={handleCloseRacerModal}
-      />
-      <ManageFlagModal
-        race={entity}
-        flag={selectedFlag}
-        open={flagModal}
-        onClose={handleCloseFlagModal}
-      />
     </Container>
   )
 }

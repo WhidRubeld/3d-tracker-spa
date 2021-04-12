@@ -1,5 +1,7 @@
 import React from 'react'
 import {
+  Box,
+  Typography,
   List,
   ListItem,
   ListItemAvatar,
@@ -8,6 +10,16 @@ import {
 } from '@material-ui/core'
 
 export default function RacersInfo({ racers, renderAction }) {
+  if (!racers.length) {
+    return (
+      <Box padding={3} textAlign='center'>
+        <Typography color='textSecondary' variant='caption'>
+          Участников не найдено
+        </Typography>
+      </Box>
+    )
+  }
+
   return (
     <List>
       {racers.map((racer, index) => (

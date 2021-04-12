@@ -27,7 +27,7 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import { load } from '../../store/list'
 import { dateForHuman, secondConvertor } from '../../heleprs'
-import CreateRaceFab from './extra/createRaceFab'
+import CreateRaceFab from './extra/CreateRaceFab'
 
 export default function HomeScreen() {
   const { entities, loading, pagination, ready } = useSelector(
