@@ -25,10 +25,10 @@ export default function Scene({ ready, onReady }) {
   const instance = useMemo(() => {
     if (showSubject) {
       const { id, type } = showSubject
-      return entity[`${type}s`].data.find((el) => el.id === id)
+      return subjects[`${type}s`].find((el) => el.id === id)
     }
     return null
-  }, [entity, showSubject])
+  }, [subjects, showSubject])
 
   function finishLoadTerrain(v) {
     setMap(v)
@@ -54,6 +54,7 @@ export default function Scene({ ready, onReady }) {
         type={showSubject && showSubject.type}
         open={!!instance}
         onClose={() => setShowSubject(null)}
+        tracking={true}
       />
     </>
   )

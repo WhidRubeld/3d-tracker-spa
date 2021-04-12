@@ -9,7 +9,13 @@ import {
 
 import TrackerInfo from '../info/TrackerInfo'
 
-export default function TrackerShowModal({ instance, type, open, onClose }) {
+export default function TrackerShowModal({
+  instance,
+  type,
+  open,
+  onClose,
+  tracking = false
+}) {
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
@@ -28,7 +34,9 @@ export default function TrackerShowModal({ instance, type, open, onClose }) {
         {type === 'racer' ? 'Просмотр участника' : 'Просмотр флага'}
       </DialogTitle>
       <DialogContent>
-        {instance && <TrackerInfo instance={instance} type={type} />}
+        {instance && (
+          <TrackerInfo instance={instance} type={type} tracking={tracking} />
+        )}
       </DialogContent>
       <DialogActions>
         <Button onClick={() => setIsOpen(false)} color='primary'>

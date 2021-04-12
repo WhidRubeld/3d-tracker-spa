@@ -1,6 +1,6 @@
 export const flagRoles = [
   {
-    text: 'Не указан',
+    text: 'Не указана',
     value: null
   },
   {

@@ -4,14 +4,98 @@ import {
   ListItem,
   ListItemText,
   ListItemSecondaryAction,
+  ListSubheader,
   Typography
 } from '@material-ui/core'
 import { getFlagRoleText, getFlagTypeText } from '../../services'
+import { dateForHuman } from '../../heleprs'
 
-export default function TrackerInfo({ instance, type }) {
-  console.log(type)
+export default function TrackerInfo({ instance, type, tracking }) {
+  const tracker = instance.tracker.data || instance.tracker
+
+  const renderFlagProps = () => {
+    return type === 'flag' ? (
+      <>
+        <ListItem>
+          <ListItemText secondary='Роль' />
+          <ListItemSecondaryAction>
+            <Typography variant='subtitle2'>
+              {getFlagRoleText(instance.role)}
+            </Typography>
+          </ListItemSecondaryAction>
+        </ListItem>
+        <ListItem>
+          <ListItemText secondary='Тип' />
+          <ListItemSecondaryAction>
+            <Typography variant='subtitle2'>
+              {getFlagTypeText(instance.type)}
+            </Typography>
+          </ListItemSecondaryAction>
+        </ListItem>
+      </>
+    ) : null
+  }
+
+  const renderMovement = () => {
+    if (!tracking) return null
+
+    const { movement } = tracker
+    if (!movement) return null
+
+    const data = movement.data || movement
+
+    return (
+      <>
+        <ListSubheader color='primary'>Текущая позиция</ListSubheader>
+        <ListItem>
+          <ListItemText secondary='Широта' />
+          <ListItemSecondaryAction>
+            <Typography variant='subtitle2'>{data.latitude}</Typography>
+          </ListItemSecondaryAction>
+        </ListItem>
+        <ListItem>
+          <ListItemText secondary='Долгота' />
+          <ListItemSecondaryAction>
+            <Typography variant='subtitle2'>{data.longitude}</Typography>
+          </ListItemSecondaryAction>
+        </ListItem>
+        <ListItem>
+          <ListItemText secondary='Высота' />
+          <ListItemSecondaryAction>
+            <Typography variant='subtitle2'>{data.altitude} м</Typography>
+          </ListItemSecondaryAction>
+        </ListItem>
+        <ListItem>
+          <ListItemText secondary='Поворот' />
+          <ListItemSecondaryAction>
+            <Typography variant='subtitle2'>
+              {data.bearing ? `${data.bearing}°` : '-'}
+            </Typography>
+          </ListItemSecondaryAction>
+        </ListItem>
+        <ListItem>
+          <ListItemText secondary='Скорость' />
+          <ListItemSecondaryAction>
+            <Typography variant='subtitle2'>
+              {data.speed ? `${data.speed} м/с` : '-'}
+            </Typography>
+          </ListItemSecondaryAction>
+        </ListItem>
+        <ListItem>
+          <ListItemText secondary='Дата генерации' />
+          <ListItemSecondaryAction>
+            <Typography variant='subtitle2'>
+              {dateForHuman(data.generated_at)}
+            </Typography>
+          </ListItemSecondaryAction>
+        </ListItem>
+      </>
+    )
+  }
+
   return (
     <List>
+      <ListSubheader color='primary'>Детали трекера</ListSubheader>
       <ListItem>
         <ListItemText secondary='Уникальный ID' />
         <ListItemSecondaryAction>
@@ -26,26 +110,7 @@ export default function TrackerInfo({ instance, type }) {
           </Typography>
         </ListItemSecondaryAction>
       </ListItem>
-      {type === 'flag' && (
-        <>
-          <ListItem>
-            <ListItemText secondary='Роль' />
-            <ListItemSecondaryAction>
-              <Typography variant='subtitle2'>
-                {getFlagRoleText(instance.role)}
-              </Typography>
-            </ListItemSecondaryAction>
-          </ListItem>
-          <ListItem>
-            <ListItemText secondary='Тип' />
-            <ListItemSecondaryAction>
-              <Typography variant='subtitle2'>
-                {getFlagTypeText(instance.type)}
-              </Typography>
-            </ListItemSecondaryAction>
-          </ListItem>
-        </>
-      )}
+      {renderFlagProps()}
       <ListItem>
         <ListItemText secondary='Цвет трекера' />
         <ListItemSecondaryAction>
@@ -54,11 +119,14 @@ export default function TrackerInfo({ instance, type }) {
               width: 20,
               height: 20,
               borderRadius: 10,
-              backgroundColor: `#${instance.tracker.data.color_hex}`
+              backgroundColor: `#${
+                tracker.data ? tracker.data.color_hex : tracker.color_hex
+              }`
             }}
           />
         </ListItemSecondaryAction>
       </ListItem>
+      {renderMovement()}
     </List>
   )
 }
