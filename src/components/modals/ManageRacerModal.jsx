@@ -4,8 +4,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
-  TextField
+  DialogTitle
 } from '@material-ui/core'
 import { ColorBox } from 'material-ui-color'
 
