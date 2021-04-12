@@ -1,14 +1,6 @@
 import React, { useMemo } from 'react'
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  IconButton,
-  Box,
-  makeStyles
-} from '@material-ui/core'
-import { useLocation, Link as RouterLink } from 'react-router-dom'
-import { ArrowBack as ArrowBackIcon } from '@material-ui/icons'
+import { AppBar, Toolbar, Typography, Box, makeStyles } from '@material-ui/core'
+import { useLocation } from 'react-router-dom'
 import GitHubButton from 'react-github-btn'
 
 const useStyles = makeStyles((theme) => ({
@@ -31,7 +23,6 @@ export default function Appbar() {
     const ext = route.pathname.split('/').pop()
     return ext
   }, [route])
-  const isHome = currentPage === 'home'
 
   const getTitle = () => {
     switch (currentPage) {
@@ -54,17 +45,6 @@ export default function Appbar() {
     <div className={classes.root}>
       <AppBar position='static' color='inherit'>
         <Toolbar>
-          {!isHome && (
-            <IconButton
-              edge='start'
-              className={classes.backButton}
-              aria-label='back'
-              component={RouterLink}
-              to='/'
-            >
-              <ArrowBackIcon />
-            </IconButton>
-          )}
           <Typography variant='h6' className={classes.title}>
             {getTitle()}
           </Typography>
