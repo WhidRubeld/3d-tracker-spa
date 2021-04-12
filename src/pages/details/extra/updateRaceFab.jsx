@@ -29,7 +29,7 @@ export default function CreateRaceFab({ race }) {
         race={entity}
       />
       <Fab
-        aria-label='Add'
+        aria-label='Edit'
         className={classes.fab}
         color='primary'
         onClick={() => setModal(true)}

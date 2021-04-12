@@ -17,7 +17,7 @@
     "axios": "^0.21.1",
     "get-pixels": "^3.3.2",
     "laravel-echo": "^1.10.0",
-    "material-ui-color-picker": "^3.5.1",
+    "material-ui-color": "^1.1.0",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
     "notistack": "^1.0.5",

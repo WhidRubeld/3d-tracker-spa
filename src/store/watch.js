@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { ApiService } from '../services'
+import { manageFlag, manageRacer } from './extra'
 
 export const load = createAsyncThunk(
   'watch/load',
@@ -43,6 +44,20 @@ export const watchSlice = createSlice({
           state.entity[`${type}s`].data[index].tracker.data.movement = movement
         }
       }
+    },
+    manageTracker: (state, { payload }) => {
+      const { type, instance } = payload
+
+      switch (type) {
+        case 'flag':
+          manageFlag(state, instance)
+          break
+        case 'racer':
+          manageRacer(state, instance)
+          break
+        default:
+          break
+      }
     }
   },
   extraReducers: {
@@ -61,6 +76,6 @@ export const watchSlice = createSlice({
   }
 })
 
-export const { reset, update, newPosition } = watchSlice.actions
+export const { reset, update, newPosition, manageTracker } = watchSlice.actions
 
 export default watchSlice.reducer

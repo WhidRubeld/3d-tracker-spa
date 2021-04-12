@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link as RouterLink } from 'react-router-dom'
@@ -12,19 +12,25 @@ import {
   Typography,
   Box,
   Chip,
-  Button
+  Button,
+  IconButton
 } from '@material-ui/core'
 import {
   EventAvailable as EventAvailableIcon,
   AccessTime as AccessTimeIcon,
   SettingsInputAntenna as SettingsInputAntennaIcon,
-  History as HistoryIcon
+  History as HistoryIcon,
+  Add as AddIcon,
+  Edit as EditIcon
 } from '@material-ui/icons'
 
 import { load } from '../../store/details'
 
 import LocationInfo from '../../components/info/LocationInfo'
+import RacersInfo from '../../components/info/RacersInfo'
+
 import UpdateRaceFab from './extra/updateRaceFab'
+import ManageRacerModal from '../../components/modals/ManageRacerModal'
 
 import { dateForHuman, secondConvertor } from '../../heleprs'
 
@@ -65,6 +71,19 @@ export default function AlignItemsList() {
   }, [error])
 
   const classes = useStyles()
+
+  const [modal, setModal] = useState(false)
+  const [selectedRacer, setSelectedRacer] = useState(null)
+
+  const handleCloseModal = () => {
+    setModal(false)
+    setSelectedRacer(null)
+  }
+
+  const handleSelectRacer = (v) => {
+    setSelectedRacer(v)
+    setModal(true)
+  }
 
   if (!entity) return null
 
@@ -114,8 +133,40 @@ export default function AlignItemsList() {
             <LocationInfo location={entity.location.data} />
           </Card>
         </Grid>
+        <Grid item xs={12} md={4}>
+          <Box display='flex' justifyContent='space-between' paddingRight={2}>
+            <Typography variant='overline'>Список участников</Typography>
+            <IconButton
+              color='primary'
+              size='small'
+              onClick={() => setModal(true)}
+            >
+              <AddIcon fontSize='small' />
+            </IconButton>
+          </Box>
+          <Card>
+            <RacersInfo
+              racers={entity.racers.data}
+              renderAction={(racer) => (
+                <IconButton
+                  color='primary'
+                  size='small'
+                  onClick={() => handleSelectRacer(racer)}
+                >
+                  <EditIcon fontSize='small' />
+                </IconButton>
+              )}
+            />
+          </Card>
+        </Grid>
       </Grid>
       <UpdateRaceFab />
+      <ManageRacerModal
+        race={entity}
+        racer={selectedRacer}
+        open={modal}
+        onClose={handleCloseModal}
+      />
     </Container>
   )
 }

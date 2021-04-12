@@ -4,7 +4,8 @@ const API_URL = process.env.REACT_APP_API_URL
 
 const RACE_BASE_URL = `${API_URL}/admin/races`
 const RACE_MODEL_URL = (id) => `${API_URL}/admin/races/${id}`
-
+const RACER_BASE_URL = `${API_URL}/admin/racers`
+const RACER_MODEL_URL = (id) => `${API_URL}/admin/racers/${id}`
 export class ApiService {
   static createRace(form) {
     return new Promise((resolve, reject) => {
@@ -37,6 +38,24 @@ export class ApiService {
     return new Promise((resolve, reject) => {
       axios
         .put(RACE_MODEL_URL(id), form)
+        .then((res) => resolve(res.data.data))
+        .catch(reject)
+    })
+  }
+
+  static createRacer(form) {
+    return new Promise((resolve, reject) => {
+      axios
+        .post(RACER_BASE_URL, form)
+        .then((res) => resolve(res.data.data))
+        .catch(reject)
+    })
+  }
+
+  static updateRacer(id, form) {
+    return new Promise((resolve, reject) => {
+      axios
+        .put(RACER_MODEL_URL(id), form)
         .then((res) => resolve(res.data.data))
         .catch(reject)
     })
