@@ -11,16 +11,30 @@ import {
 import { Add as AddIcon, MoreVert as MoreVertIcon } from '@material-ui/icons'
 
 import FlagsInfo from '../../../components/info/FlagsInfo'
+import TrackerShowModal from '../../../components/modals/TrackerShowModal'
 import ManageFlagModal from '../../../components/modals/ManageFlagModal'
+import InstanceDeleteModal from '../../../components/modals/InstanceDeleteModal'
 
 export default function FlagsCard({ entity }) {
+  const [showModal, setShowModal] = useState(false)
   const [manageModal, setManageModal] = useState(false)
+  const [deleteModal, setDeleteModal] = useState(false)
   const [selectedFlag, setSelectedFlag] = useState(null)
 
   const [menu, setMenu] = useState()
 
+  const handleCloseShowModal = () => {
+    setShowModal(false)
+    setSelectedFlag(null)
+  }
+
   const handleCloseManageModal = () => {
     setManageModal(false)
+    setSelectedFlag(null)
+  }
+
+  const handleCloseDeleteModal = () => {
+    setDeleteModal(false)
     setSelectedFlag(null)
   }
 
@@ -37,11 +51,13 @@ export default function FlagsCard({ entity }) {
   const onSelectMenu = (type) => {
     switch (type) {
       case 'show':
+        setShowModal(true)
         break
       case 'edit':
         setManageModal(true)
         break
       case 'delete':
+        setDeleteModal(true)
         break
       default:
         break
@@ -99,11 +115,27 @@ export default function FlagsCard({ entity }) {
           )}
         />
       </Card>
+      <TrackerShowModal
+        instance={selectedFlag}
+        type='flag'
+        open={showModal}
+        onClose={handleCloseShowModal}
+      />
       <ManageFlagModal
         race={entity}
         flag={selectedFlag}
         open={manageModal}
         onClose={handleCloseManageModal}
+      />
+      <InstanceDeleteModal
+        type='flag'
+        instance={selectedFlag}
+        title='Удаление флага'
+        description='Вы действительно хотите удалить данный флаг? Данное действие необратимо, все существующие координаты трекера будут удалены'
+        successMessage='Флаг успешно удален'
+        errorMessage='Ошибка удаления флага'
+        open={deleteModal}
+        onClose={handleCloseDeleteModal}
       />
     </>
   )

@@ -60,7 +60,6 @@ export default function ManageRacerModal({ race, racer, open, onClose }) {
   const handleClose = () => {
     setIsOpen(false)
     setLoading(false)
-    onClose()
   }
 
   const handleChangeColor = (value) => {
@@ -82,7 +81,6 @@ export default function ManageRacerModal({ race, racer, open, onClose }) {
     promise
       .then((data) => {
         setIsOpen(false)
-        onClose()
         enqueueSnackbar(
           !racer ? 'Участник успешно добавлен' : 'Участник успешно обновлен',
           {
@@ -137,6 +135,7 @@ export default function ManageRacerModal({ race, racer, open, onClose }) {
     <Dialog
       open={isOpen}
       onClose={handleClose}
+      onExited={onClose}
       disableBackdropClick={loading}
       aria-labelledby='race-modal-title'
     >

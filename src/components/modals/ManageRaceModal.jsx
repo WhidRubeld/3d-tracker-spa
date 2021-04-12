@@ -80,7 +80,6 @@ export default function ManageRaceModal({ race, open, onClose }) {
   const handleClose = () => {
     setIsOpen(false)
     setLoading(false)
-    onClose()
   }
 
   const onSubmit = () => {
@@ -97,7 +96,6 @@ export default function ManageRaceModal({ race, open, onClose }) {
     promise
       .then((instance) => {
         setIsOpen(false)
-        onClose()
         enqueueSnackbar(
           !race
             ? 'Отслеживание успешно добавлено'
@@ -143,6 +141,7 @@ export default function ManageRaceModal({ race, open, onClose }) {
     <Dialog
       open={isOpen}
       onClose={handleClose}
+      onExited={onClose}
       disableBackdropClick={loading}
       aria-labelledby='race-modal-title'
     >

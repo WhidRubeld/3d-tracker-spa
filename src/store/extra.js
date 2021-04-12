@@ -18,7 +18,12 @@ export const manageRacer = (state, instance) => {
       break
     case 'delete':
       index = racers.data.map((racer) => racer.id).indexOf(id)
-      if (index !== -1) state.enttiy.racers.data.splice(index, 1)
+      if (index !== -1) {
+        state.entity.racers.data = [
+          ...state.entity.racers.data.slice(0, index),
+          ...state.entity.racers.data.slice(index + 1)
+        ]
+      }
       break
     default:
       break
@@ -44,8 +49,13 @@ export const manageFlag = (state, instance) => {
       if (index !== -1) state.entity.flags.data[index] = data
       break
     case 'delete':
-      index = flags.data.map((flag) => flag.id).indexOf(id)
-      if (index !== -1) state.enttiy.flags.data.splice(index, 1)
+      index = flags.data.map((racer) => racer.id).indexOf(id)
+      if (index !== -1) {
+        state.entity.flags.data = [
+          ...state.entity.flags.data.slice(0, index),
+          ...state.entity.flags.data.slice(index + 1)
+        ]
+      }
       break
     default:
       break

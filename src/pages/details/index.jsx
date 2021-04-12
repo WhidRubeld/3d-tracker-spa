@@ -23,6 +23,7 @@ import {
 import { load } from '../../store/details'
 
 import UpdateRaceFab from './extra/UpdateRaceFab'
+import DeleteRaceFab from './extra/DeleteRaceFab'
 import RacersCard from './extra/RacersCard'
 import FlagsCard from './extra/FlagsCard'
 import LocationCard from './extra/LocationCard'
@@ -44,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function AlignItemsList() {
+export default function DetailsScreen() {
   const { raceId } = useParams()
 
   const dispatch = useDispatch()
@@ -120,6 +121,7 @@ export default function AlignItemsList() {
         </Grid>
       </Grid>
       <UpdateRaceFab />
+      <DeleteRaceFab />
     </Container>
   )
 }

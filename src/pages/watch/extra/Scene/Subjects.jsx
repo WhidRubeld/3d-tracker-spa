@@ -3,7 +3,7 @@ import React from 'react'
 import RacerPoint from '../../../../components/map/RacerPoint'
 import FlagPoint from '../../../../components/map/FlagPoint'
 
-export default function Subjects({ subjects }) {
+export default function Subjects({ subjects, onPress }) {
   if (subjects) {
     return (
       <>
@@ -12,6 +12,7 @@ export default function Subjects({ subjects }) {
           const { position, color_hex } = tracker
           return (
             <RacerPoint
+              onClick={() => onPress({ id: racer.id, type: 'racer' })}
               color={`#${color_hex}`}
               position={position}
               key={index}
@@ -23,6 +24,7 @@ export default function Subjects({ subjects }) {
           const { position, color_hex } = tracker
           return (
             <FlagPoint
+              onClick={() => onPress({ id: flag.id, type: 'flag' })}
               color={`#${color_hex}`}
               position={position}
               key={index}

@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function CreateRaceFab({ race }) {
+export default function CreateRaceFab() {
   const [modal, setModal] = useState(false)
   const classes = useStyles()
 

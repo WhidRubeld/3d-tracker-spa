@@ -45,6 +45,12 @@ export class ApiService {
     })
   }
 
+  static deleteRace(id) {
+    return new Promise((resolve, reject) => {
+      axios.delete(RACE_MODEL_URL(id)).then(resolve).catch(reject)
+    })
+  }
+
   static createRacer(form) {
     return new Promise((resolve, reject) => {
       axios
@@ -63,6 +69,12 @@ export class ApiService {
     })
   }
 
+  static deleteRacer(id) {
+    return new Promise((resolve, reject) => {
+      axios.delete(RACER_MODEL_URL(id)).then(resolve).catch(reject)
+    })
+  }
+
   static createFlag(form) {
     return new Promise((resolve, reject) => {
       axios
@@ -78,6 +90,12 @@ export class ApiService {
         .put(FLAG_MODEL_URL(id), form)
         .then((res) => resolve(res.data.data))
         .catch(reject)
+    })
+  }
+
+  static deleteFlag(id) {
+    return new Promise((resolve, reject) => {
+      axios.delete(FLAG_MODEL_URL(id)).then(resolve).catch(reject)
     })
   }
 }

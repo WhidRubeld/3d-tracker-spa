@@ -68,7 +68,6 @@ export default function ManageFlagModal({ race, flag, open, onClose }) {
   const handleClose = () => {
     setIsOpen(false)
     setLoading(false)
-    onClose()
   }
 
   const handleChangeColor = (value) => {
@@ -90,7 +89,6 @@ export default function ManageFlagModal({ race, flag, open, onClose }) {
     promise
       .then((data) => {
         setIsOpen(false)
-        onClose()
         enqueueSnackbar(
           !flag ? 'Флаг успешно добавлен' : 'Флаг успешно обновлен',
           {
@@ -143,6 +141,7 @@ export default function ManageFlagModal({ race, flag, open, onClose }) {
     <Dialog
       open={isOpen}
       onClose={handleClose}
+      onExited={onClose}
       disableBackdropClick={loading}
       aria-labelledby='race-modal-title'
     >
@@ -170,7 +169,6 @@ export default function ManageFlagModal({ race, flag, open, onClose }) {
             margin='normal'
             label='Роль флага'
             value={form.role}
-            displayEmpty={false}
             onChange={(event) =>
               setForm((v) => ({ ...v, role: event.target.value }))
             }
@@ -186,7 +184,6 @@ export default function ManageFlagModal({ race, flag, open, onClose }) {
             margin='normal'
             label='Тип флага'
             value={form.type}
-            displayEmpty={false}
             onChange={(event) =>
               setForm((v) => ({ ...v, type: event.target.value }))
             }
