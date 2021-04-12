@@ -87,7 +87,7 @@ export default function ManageRaceModal({ race, open, onClose }) {
     setLoading(true)
     const payload = {
       ...form,
-      started_at: moment.utc(form.started_at).format('YYYY-MM-DD HH:mm:ss')
+      started_at: moment(form.started_at).utc().format('YYYY-MM-DD HH:mm:ss')
     }
 
     const promise = !race
