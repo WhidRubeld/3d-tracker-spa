@@ -38,7 +38,7 @@ export default function Scene({ ready, onReady }) {
   return (
     <>
       <Canvas
-        style={{ position: 'absolute', height: '100%', width: '100%' }}
+        className='scene-view'
         onCreated={(state) => state.gl.setClearColor('#353535')}
       >
         <Grid />

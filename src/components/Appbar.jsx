@@ -3,17 +3,20 @@ import { AppBar, Toolbar, Typography, Box, makeStyles } from '@material-ui/core'
 import { useLocation } from 'react-router-dom'
 import GitHubButton from 'react-github-btn'
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1
-  },
-  backButton: {
-    marginRight: theme.spacing(2)
-  },
-  title: {
-    flexGrow: 1
+const useStyles = makeStyles((theme) => {
+  console.log(theme)
+  return {
+    root: {
+      flexGrow: 1
+    },
+    backButton: {
+      marginRight: theme.spacing(2)
+    },
+    title: {
+      flexGrow: 1
+    }
   }
-}))
+})
 
 export default function Appbar() {
   const route = useLocation()

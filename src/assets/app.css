@@ -8,3 +8,20 @@
   width: auto !important;
   padding: 10px 25px !important;
 }
+
+.scene-view {
+  width: 100vw !important;
+  height: calc(100vh - 56px) !important;
+}
+
+@media (min-width: 0px) and (orientation: landscape) {
+  .scene-view {
+    height: calc(100vh - 48px) !important;
+  }
+}
+
+@media (min-width: 600px) {
+  .scene-view {
+    height: calc(100vh - 64px) !important;
+  }
+}
