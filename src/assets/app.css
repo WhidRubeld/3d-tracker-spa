@@ -2,3 +2,9 @@
   margin: 0;
   padding: 0;
 }
+
+.muicc-colorbox-sliders {
+  max-width: 300px !important;
+  width: auto !important;
+  padding: 10px 25px !important;
+}
