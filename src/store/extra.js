@@ -41,7 +41,7 @@ export const manageFlag = (state, instance) => {
       break
     case 'update':
       index = flags.data.map((flag) => flag.id).indexOf(id)
-      if (index !== -1) state.enttiy.flags.data[index] = data
+      if (index !== -1) state.entity.flags.data[index] = data
       break
     case 'delete':
       index = flags.data.map((flag) => flag.id).indexOf(id)
