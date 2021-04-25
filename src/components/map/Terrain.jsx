@@ -11,7 +11,10 @@ export default function Terrain({ race, onReady, ready }) {
     const { latitude, longitude, zoom_index: zoom } = location
     setMap(
       new Map({
-        source: new Source('mapbox', process.env.REACT_APP_MAPBOX_TOKEN),
+        source: new Source(
+          process.env.REACT_APP_MAP_TEXTURE_API,
+          process.env.REACT_APP_MAP_TEXTURE_TOKEN
+        ),
         location: [latitude, longitude],
         options: { zoom },
         material: { wireframe: false }

@@ -7,30 +7,6 @@ import scales from './scales.json'
 const tileMaterial = new MeshNormalMaterial({ wireframe: true })
 
 class Utils {
-  static long2tile(lon, zoom) {
-    return ((lon + 180) / 360) * Math.pow(2, zoom)
-  }
-
-  static lat2tile(lat, zoom) {
-    return (
-      ((1 -
-        Math.log(
-          Math.tan((lat * Math.PI) / 180) + 1 / Math.cos((lat * Math.PI) / 180)
-        ) /
-          Math.PI) /
-        2) *
-      Math.pow(2, zoom)
-    )
-  }
-
-  static geo2tile(geoLocation, zoom) {
-    const maxTile = Math.pow(2, zoom)
-    return {
-      x: Math.abs(Math.floor(Utils.long2tile(geoLocation[1], zoom)) % maxTile),
-      y: Math.abs(Math.floor(Utils.lat2tile(geoLocation[0], zoom)) % maxTile)
-    }
-  }
-
   static tile2position(z, x, y, center, tileSize) {
     const offsetAtZ = (z) => {
       return {
@@ -319,7 +295,10 @@ class Map {
   }
 
   init(callback = () => {}) {
-    this.center = Utils.geo2tile(this.geoLocation, this.zoom)
+    const [lat, lng] = this.geoLocation
+    const [x, y] = tilebelt.pointToTile(lng, lat, this.zoom)
+    this.center = { x, y }
+
     const tileOffset = Math.floor(this.nTiles / 2)
 
     for (let i = 0; i < this.nTiles; i++) {
