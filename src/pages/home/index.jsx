@@ -148,6 +148,14 @@ export default function HomeScreen() {
   }
 
   function renderRacesList() {
+    if (!entities.length) {
+      return (
+        <Box textAlign='center'>
+          <Typography variant='body2'>Отслеживаний не найдено</Typography>
+        </Box>
+      )
+    }
+
     return (
       <Grid container spacing={3}>
         {entities.map((race, index) => (
@@ -168,7 +176,7 @@ export default function HomeScreen() {
         marginTop={5}
         marginBottom={5}
       >
-        {ready && (
+        {ready && entities.length ? (
           <Pagination
             color='primary'
             page={current_page}
@@ -176,7 +184,7 @@ export default function HomeScreen() {
             disabled={loading}
             onChange={(e, v) => dispatch(load(v))}
           />
-        )}
+        ) : null}
       </Box>
       <CreateRaceFab />
     </Container>
