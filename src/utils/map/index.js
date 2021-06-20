@@ -340,15 +340,14 @@ class Map {
     if (tile.key() in this.tileCache) return
 
     this.tileCache[tile.key()] = tile
+
     tile
       .fetch()
-      .then((tile) => {
-        this.terrain.add(tile.mesh)
-      })
+      .then((v) => this.terrain.add(v.mesh))
       .then(() => {
-        Object.values(this.tileCache).forEach((tile) =>
-          tile.resolveSeams(this.tileCache)
-        )
+        Object.values(this.tileCache).forEach((v) => {
+          v.resolveSeams(this.tileCache)
+        })
       })
   }
 
