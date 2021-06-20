@@ -93,11 +93,12 @@ export default function TrackerInfo({ instance, type, tracking }) {
     )
   }
 
+  console.log(instance)
+
   return (
     <List>
-      <ListSubheader color='primary'>Детали трекера</ListSubheader>
       <ListItem>
-        <ListItemText secondary='Уникальный ID' />
+        <ListItemText secondary='ID объекта' />
         <ListItemSecondaryAction>
           <Typography variant='subtitle2'>{instance.id}</Typography>
         </ListItemSecondaryAction>
@@ -111,6 +112,14 @@ export default function TrackerInfo({ instance, type, tracking }) {
         </ListItemSecondaryAction>
       </ListItem>
       {renderFlagProps()}
+      <ListItem>
+        <ListItemText secondary='ID трекера' />
+        <ListItemSecondaryAction>
+          <Typography variant='subtitle2'>
+            {tracker.data ? tracker.data.id : tracker.id}
+          </Typography>
+        </ListItemSecondaryAction>
+      </ListItem>
       <ListItem>
         <ListItemText secondary='Цвет трекера' />
         <ListItemSecondaryAction>
